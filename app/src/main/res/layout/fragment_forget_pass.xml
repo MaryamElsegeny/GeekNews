@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.ForgetPassFragment"
+    android:background="@color/gray">
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/gdh04"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.04"/>
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/gdh08"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.08"/>
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/gdh25"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.25"/>
+
+            <TextView
+                android:id="@+id/signupTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/britannic_medium"
+                android:text="@string/forgetpass"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_30ssp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gdh08"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                app:layout_constraintWidth_percent="0.7"
+                app:layout_constraintBottom_toTopOf="@id/gdh25"
+
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/loginvector"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gdh04">
+                <androidx.constraintlayout.widget.Guideline
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gdh30"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.30"/>
+
+                <EditText
+                    android:id="@+id/forgetpassEmailED"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    app:layout_constraintTop_toTopOf="@id/gdh30"
+                    app:layout_constraintWidth_percent="0.82"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textSize="@dimen/_12ssp"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/black"
+                    android:minHeight="@dimen/_40sdp"
+                    />
+                <TextView
+                    android:id="@+id/forgetpasswarningTV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/forgetpassEmailED"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:textColor="@color/gray1"
+                    android:text="@string/hintForgetPass"
+                    app:layout_constraintStart_toStartOf="@id/forgetpassEmailED"
+                    app:layout_constraintEnd_toEndOf="@id/forgetpassEmailED"
+                    />
+
+
+
+                <Button
+                    android:id="@+id/resetpass_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:background="@drawable/login_shape"
+                    android:backgroundTint="@color/gray"
+                    android:minHeight="@dimen/_40sdp"
+                    android:text="@string/resetPass"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/forgetpasswarningTV"
+                    app:layout_constraintStart_toStartOf="@id/forgetpasswarningTV"
+                    app:layout_constraintTop_toBottomOf="@id/forgetpasswarningTV"
+
+                    />
+
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

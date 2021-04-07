@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">GeekNews</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
+    <string name="Hello">Hello !</string>
+    <string name="email">e-mail</string>
+    <string name="pass">password</string>
+    <string name="login">login</string>
+    <string name="forget_pass">Forgot password?Reset</string>
+    <string name="sign_in"> sign in</string>
+    <string name="sign_up_with_line"><u>sign up</u></string>
+    <string name="sign_up">sign up</string>
+    <string name="userName">username</string>
+    <string name="phone">phone number</string>
+    <string name="facebook">facebook</string>
+    <string name="google">google</string>
+    <string name="forgetpass">Forget Password</string>
+    <string name="hintForgetPass">  we will send you an email password reset
+    instructions. If you do not remember your email address,
+    please contact us
+</string>
+    <string name="resetPass">Reset password</string>
+    <string name="newPass">New password</string>
+    <string name="confirmNewPass">Confirm new password</string>
+    <string name="done">Done</string>
+    <string name="allBranches">All branches</string>
+    <string name="science_topics">Science topics:</string>
+    <string name="date">Date</string>
+    <string name="type">Type</string>
+    <string name="filter">filter</string>
+    <string name="apply">Apply</string>
+
+
+</resources>
