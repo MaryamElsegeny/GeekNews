@@ -92,6 +92,7 @@
         >
 
         <Button
+            android:id="@+id/applyBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/login_shape"

@@ -12,24 +12,21 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.geeknews.R;
 import com.example.geeknews.adapters.CategoriesAdapter;
-import com.example.geeknews.classes.BottomSheetDialog;
+import com.example.geeknews.classes.BottomSheetFilter;
+import com.example.geeknews.classes.BottomSheetTypeAndDate;
 import com.example.geeknews.classes.RecyclerTouchListener;
-import com.example.geeknews.fragments.CategoriesFragment;
 import com.example.geeknews.interfaces.DrawerLocker;
 import com.example.geeknews.models.Model;
-import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements DrawerLocker , BottomSheetDialog.BottomSheetListener {
+public class MainActivity extends AppCompatActivity implements DrawerLocker , BottomSheetFilter.BottomSheetListener , BottomSheetTypeAndDate.BottomSheetListener {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout ;

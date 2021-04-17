@@ -1,6 +1,5 @@
 package com.example.geeknews.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -11,18 +10,16 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.example.geeknews.R;
 import com.example.geeknews.adapters.PostAdapter;
-import com.example.geeknews.classes.BottomSheetDialog;
+import com.example.geeknews.classes.BottomSheetFilter;
 import com.example.geeknews.classes.RecyclerTouchListener;
 import com.example.geeknews.interfaces.DrawerLocker;
 import com.example.geeknews.models.PostModel;
@@ -30,7 +27,7 @@ import com.example.geeknews.models.PostModel;
 import java.util.ArrayList;
 
 
-public class HomeFragment extends Fragment implements BottomSheetDialog.BottomSheetListener {
+public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSheetListener {
 
 private View view ;
 private ConstraintLayout filterIV ;
@@ -38,6 +35,8 @@ private PostAdapter postAdapter ;
 private ArrayList<PostModel> postModelArrayList = new ArrayList<>();
 private RecyclerView rv;
 private CardView postCard ;
+    private ConstraintLayout type ;
+    private ConstraintLayout date ;
 
 
 
@@ -71,14 +70,16 @@ private CardView postCard ;
         addDataToList();
         clickRv();
 
+
     }
     private void clickFilterIv(){
         filterIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetDialog bottomSheet = new BottomSheetDialog();
-                bottomSheet.show(requireActivity().getSupportFragmentManager(), "exampleBottomSheet");
                 filterIV.getBackground().setAlpha(45);
+
+                BottomSheetFilter bottomSheet = new BottomSheetFilter();
+                bottomSheet.show(requireActivity().getSupportFragmentManager(), "exampleBottomSheet");
 
             }
         });
