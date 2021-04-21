@@ -12,19 +12,26 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.geeknews.R;
 import com.example.geeknews.adapters.CategoriesAdapter;
+import com.example.geeknews.adapters.PostAdapter;
 import com.example.geeknews.classes.BottomSheetFilter;
 import com.example.geeknews.classes.BottomSheetTypeAndDate;
 import com.example.geeknews.classes.RecyclerTouchListener;
+import com.example.geeknews.fragments.HomeFragment;
 import com.example.geeknews.interfaces.DrawerLocker;
 import com.example.geeknews.models.Model;
+import com.example.geeknews.models.PostModel;
 
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity implements DrawerLocker , BottomSheetFilter.BottomSheetListener , BottomSheetTypeAndDate.BottomSheetListener {
 
@@ -35,9 +42,11 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
     private ArrayList<Model> modelArrayList = new ArrayList<>();
     private ActionBarDrawerToggle actionBarDrawerToggle ;
     private Model model ;
+    private SharedPreferences sharedPreferences ;
+    private SharedPreferences.Editor editor;
+    private NavController navController ;
+    private NavGraph navGraph;
 
-    NavController navController ;
-    NavGraph navGraph;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         setUpRecyclerView();
-        clickRv();
         actionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
          navController = Navigation.findNavController(this, R.id.nav_host_fragment);
          navGraph = navController.getNavInflater().inflate(R.navigation.home_nav);
@@ -72,23 +80,30 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
         rv.setAdapter(categoriesAdapter);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this , drawerLayout , toolbar , R.string.drawer_open , R.string.drawer_close);
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        clickRv();
+
 
     }
 
     private void addDataToList() {
-        Model orderModel = new Model("Data analysis");
-        Model orderModel1 = new Model("Software");
-        Model orderModel2 = new Model("Algorithm");
-        Model orderModel3 = new Model("Network");
-        Model orderModel4 = new Model("Data mining");
-        Model orderModel5 = new Model("Artificial neural network");
+        Model orderModel1= new Model("Software Engineering" , "SoftwareEngineering");
+        Model orderModel2 = new Model("Programming Languages" , "Programming Languages, Compilers, Interpreters");
+        Model orderModel3 = new Model("Database Management" , "Database Management");
+        Model orderModel4 = new Model("Artificial Intelligence" , "AI");
+        Model orderModel5 = new Model("Algorithm" , "Algorithm Analysis and Problem Complexity");
+        Model orderModel6 = new Model("Data Mining" , "Data Mining and Knowledge Discovery");
+        Model orderModel7 = new Model("Information Systems" , "Management of Computing and Information Systems");
+        Model orderModel8 = new Model("Retrieve Information","Information Storage and Retrieval");
 
-        modelArrayList.add(orderModel);
+
         modelArrayList.add(orderModel1);
         modelArrayList.add(orderModel2);
         modelArrayList.add(orderModel3);
         modelArrayList.add(orderModel4);
         modelArrayList.add(orderModel5);
+        modelArrayList.add(orderModel6);
+        modelArrayList.add(orderModel7);
+        modelArrayList.add(orderModel8);
 
     }
 
@@ -103,7 +118,13 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
             public void onClick(View view, int position) {
 
                 model = modelArrayList.get(position);
-                Toast.makeText(MainActivity.this, ""+model.getCategory(), Toast.LENGTH_SHORT).show();
+
+                sharedPreferences = getSharedPreferences("category name in navDrawer", Context.MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putString("name",model.getNameCategory());
+                editor.putString("topic",model.getCategory());
+                editor.apply();
+
                 drawerLayout.closeDrawers();
                 navGraph.setStartDestination(R.id.homeFragment);
                 navController.setGraph(navGraph);

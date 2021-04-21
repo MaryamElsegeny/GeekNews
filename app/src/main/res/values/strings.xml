@@ -31,6 +31,19 @@
     <string name="type">Type</string>
     <string name="filter">filter</string>
     <string name="apply">Apply</string>
+    <string name="download">download</string>
+    <string name="main_article">main article</string>
+    <string name="abstractt">abstract</string>
+    <string name="like">like</string>
+    <string name="comment">comment</string>
+    <string name="software_engineering">Software Engineering</string>
+    <string name="programming_languages">Programming Languages</string>
+    <string name="algorithm">Algorithm</string>
+    <string name="database_management">Database Management</string>
+    <string name="artificial_intelligence">Artificial Intelligence</string>
+    <string name="retrieve_information">Retrieve Information</string>
+    <string name="information_systems">Information Systems</string>
+    <string name="data_mining">Data Mining</string>
 
 
 </resources>

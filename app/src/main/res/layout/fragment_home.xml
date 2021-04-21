@@ -68,8 +68,22 @@
         android:layout_marginStart="@dimen/_5sdp"
         android:textColor="@color/gray2"
         android:textSize="@dimen/_14ssp"
-        android:layout_marginLeft="@dimen/_5sdp" />
+        android:layout_marginLeft="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="@id/tv"
+        android:textStyle="bold"
+        />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/topicTV"
+        android:indeterminateTint="@color/gray"
 
+
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/post_rv"
         android:layout_width="0dp"

@@ -1,5 +1,7 @@
 package com.example.geeknews.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -9,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -16,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.geeknews.R;
 
@@ -24,15 +29,21 @@ public class CategoriesFragment extends Fragment {
 
     private View view ;
     private LinearLayout allBranches ;
-    private TextView category1;
-    private TextView category2;
-    private TextView category3;
-    private TextView category4;
-    private TextView category5;
-    private TextView category6;
-    private TextView category7;
-    private TextView category8;
+    private TextView softwareEngineering;
+    private TextView programmingLanguage;
+    private TextView databaseManagement;
+    private TextView artificialIntelligence;
+    private TextView algorithm;
+    private TextView dataMining;
+    private TextView informationSystem;
+    private TextView retrieveInformation;
+    private String nameCategory ;
+    private String scienceTopic;
+    private SharedPreferences sharedPreferences ;
+    private SharedPreferences.Editor editor;
 
+    private NavController navController ;
+    private NavGraph navGraph;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,15 +58,16 @@ public class CategoriesFragment extends Fragment {
                              Bundle savedInstanceState) {
          view = inflater.inflate(R.layout.fragment_categories, container, false);
          allBranches = view.findViewById(R.id.allBranches);
-         category1 = view.findViewById(R.id.categoey1);
-        category2 = view.findViewById(R.id.categoey2);
-        category3 = view.findViewById(R.id.categoey3);
-        category4 = view.findViewById(R.id.categoey4);
-        category5 = view.findViewById(R.id.categoey5);
-        category6 = view.findViewById(R.id.categoey6);
-        category7 = view.findViewById(R.id.categoey7);
-        category8 = view.findViewById(R.id.categoey8);
-
+         softwareEngineering = view.findViewById(R.id.categoey1);
+        programmingLanguage = view.findViewById(R.id.categoey2);
+        databaseManagement = view.findViewById(R.id.categoey3);
+        artificialIntelligence = view.findViewById(R.id.categoey4);
+        algorithm = view.findViewById(R.id.categoey5);
+        dataMining = view.findViewById(R.id.categoey6);
+        informationSystem = view.findViewById(R.id.categoey7);
+        retrieveInformation = view.findViewById(R.id.categoey8);
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+        navGraph = navController.getNavInflater().inflate(R.navigation.home_nav);
         return view ;
     }
 
@@ -64,8 +76,9 @@ public class CategoriesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
-onBackPressed();
-clickCategories();
+            onBackPressed();
+            clickCategories();
+            saveCategory();
 
     }
 
@@ -74,67 +87,108 @@ clickCategories();
             @Override
             public void onClick(View v) {
                 allBranches.getBackground().setAlpha(180);
-
+                nameCategory="";
+                scienceTopic="All branches";
+                saveCategory();
+                navGraph.setStartDestination(R.id.categoriesFragment);
+                navController.setGraph(navGraph);
                 Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
             }
         });
-        category1.setOnClickListener(new View.OnClickListener() {
+        softwareEngineering.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                category1.getBackground().setAlpha(180);
-
+                softwareEngineering.getBackground().setAlpha(180);
+                nameCategory="SoftwareEngineering";
+                scienceTopic="Software Engineering";
+                saveCategory();
+                navGraph.setStartDestination(R.id.categoriesFragment);
+                navController.setGraph(navGraph);
                 Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
             }
         });
-        category2.setOnClickListener(new View.OnClickListener() {
+        programmingLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                category2.getBackground().setAlpha(180);
-
+                programmingLanguage.getBackground().setAlpha(180);
+                nameCategory="Programming Languages, Compilers, Interpreters";
+                scienceTopic="Programming Language";
+                saveCategory();
+                navGraph.setStartDestination(R.id.categoriesFragment);
+                navController.setGraph(navGraph);
                 Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
             }
-        }); category3.setOnClickListener(new View.OnClickListener() {
+        }); databaseManagement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                category3.getBackground().setAlpha(180);
-
+                databaseManagement.getBackground().setAlpha(180);
+                nameCategory="Database Management";
+                scienceTopic="Database Management";
+                saveCategory();
+                navGraph.setStartDestination(R.id.categoriesFragment);
+                navController.setGraph(navGraph);
                 Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
             }
-        }); category4.setOnClickListener(new View.OnClickListener() {
+        }); artificialIntelligence.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                category4.getBackground().setAlpha(180);
-
+                artificialIntelligence.getBackground().setAlpha(180);
+                nameCategory="AI";
+                scienceTopic="Artificial Intelligence";
+                saveCategory();
+                navGraph.setStartDestination(R.id.categoriesFragment);
+                navController.setGraph(navGraph);
                 Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
             }
-        }); category5.setOnClickListener(new View.OnClickListener() {
+        }); algorithm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                category5.getBackground().setAlpha(180);
+                algorithm.getBackground().setAlpha(180);
+                nameCategory="Algorithm Analysis and Problem Complexity";
+                scienceTopic="Algorithm";
 
+                saveCategory();
+                navGraph.setStartDestination(R.id.categoriesFragment);
+                navController.setGraph(navGraph);
                 Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
             }
-        }); category6.setOnClickListener(new View.OnClickListener() {
+        }); dataMining.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                category6.getBackground().setAlpha(180);
-
+                dataMining.getBackground().setAlpha(180);
+                nameCategory="Data Mining and Knowledge Discovery";
+                scienceTopic="Data Mining";
+                saveCategory();
+                navGraph.setStartDestination(R.id.categoriesFragment);
+                navController.setGraph(navGraph);
                 Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
             }
-        }); category7.setOnClickListener(new View.OnClickListener() {
+        }); informationSystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                category7.getBackground().setAlpha(180);
+                informationSystem.getBackground().setAlpha(180);
+                nameCategory="Management of Computing and Information Systems";
+                scienceTopic="Information Systems";
 
+                saveCategory();
+                navGraph.setStartDestination(R.id.categoriesFragment);
+                navController.setGraph(navGraph);
                 Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
             }
-        }); category8.setOnClickListener(new View.OnClickListener() {
+        }); retrieveInformation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                category8.getBackground().setAlpha(180);
+                retrieveInformation.getBackground().setAlpha(180);
+                nameCategory="Information Storage and Retrieval";
+                scienceTopic="Retrieve Information";
+
+                saveCategory();
+                navGraph.setStartDestination(R.id.categoriesFragment);
+                navController.setGraph(navGraph);
                 Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
             }
         });
+
     }
 
     public void onBackPressed() {
@@ -147,6 +201,17 @@ clickCategories();
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), callback);
 
+    }
+
+
+    private void saveCategory(){
+        sharedPreferences = requireActivity().getSharedPreferences("category name", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("name",nameCategory);
+        editor.putString("topic",scienceTopic);
+
+
+        editor.apply();
     }
 
 }

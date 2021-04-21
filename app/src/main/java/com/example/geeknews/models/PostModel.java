@@ -1,10 +1,16 @@
 package com.example.geeknews.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PostModel {
 
+    @SerializedName("contenttype")
    private String postType ;
+   @SerializedName("title")
     private String postAbstract ;
+   @SerializedName("publicationdate")
     private String PostDate ;
+
     private String postAutherName ;
 
     public PostModel(String postType, String postAbstract, String postDate) {
