@@ -10,14 +10,23 @@ public class PostModel {
     private String postAbstract ;
    @SerializedName("publicationdate")
     private String PostDate ;
+    @SerializedName("count")
+   private String count ;
+    @SerializedName("items_id")
+    private int id ;
+
 
     private String postAutherName ;
+
+    public PostModel() {
+    }
 
     public PostModel(String postType, String postAbstract, String postDate) {
         this.postType = postType;
         this.postAbstract = postAbstract;
         PostDate = postDate;
     }
+
 
     public String getPostType() {
         return postType;
@@ -49,6 +58,22 @@ public class PostModel {
 
     public void setPostAutherName(String postAutherName) {
         this.postAutherName = postAutherName;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

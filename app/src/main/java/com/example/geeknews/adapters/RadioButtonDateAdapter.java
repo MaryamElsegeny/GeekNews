@@ -14,13 +14,13 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RadioButtonAdapter extends RecyclerView.Adapter<RadioButtonAdapter.RadioButtonViewHolder>{
+public class RadioButtonDateAdapter extends RecyclerView.Adapter<RadioButtonDateAdapter.RadioButtonViewHolder>{
 
     private ArrayList<RadioButtonModel> modelArrayList;
 
     private Context context ;
 
-    public RadioButtonAdapter(ArrayList<RadioButtonModel> modelArrayList, Context context) {
+    public RadioButtonDateAdapter(ArrayList<RadioButtonModel> modelArrayList, Context context) {
         this.modelArrayList = modelArrayList;
         this.context = context;
     }
@@ -37,7 +37,8 @@ public class RadioButtonAdapter extends RecyclerView.Adapter<RadioButtonAdapter.
     public void onBindViewHolder(@NonNull RadioButtonViewHolder holder, int position) {
 
         RadioButtonModel radioButtonModel = modelArrayList.get(position);
-        holder.filterRadioBtn.setText(radioButtonModel.getFilterRadBtn());
+        holder.filterRadioBtn.setText(radioButtonModel.getRadBtnDate());
+
         holder.filterRadioBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

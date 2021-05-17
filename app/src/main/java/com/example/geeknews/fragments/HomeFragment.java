@@ -1,26 +1,9 @@
 package com.example.geeknews.fragments;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.NavGraph;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +15,7 @@ import com.example.geeknews.R;
 import com.example.geeknews.adapters.PostAdapter;
 import com.example.geeknews.classes.BottomSheetFilter;
 import com.example.geeknews.classes.RecyclerTouchListener;
+import com.example.geeknews.classes.SharedViewModel;
 import com.example.geeknews.interfaces.DrawerLocker;
 import com.example.geeknews.models.PostModel;
 import com.example.geeknews.models.ResultsModel;
@@ -40,16 +24,33 @@ import com.example.geeknews.retrofit.RetrofitFactory;
 
 import java.util.ArrayList;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static android.content.Context.MODE_PRIVATE;
 
 
 public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSheetListener {
 
-private View view ;
-private ConstraintLayout filterIV ;
-private PostAdapter postAdapter ;
-private ArrayList<PostModel> postModelArrayList = new ArrayList<>();
-private RecyclerView rv;
+    private View view;
+    private ConstraintLayout filterIV;
+    private PostAdapter postAdapter;
+    private ArrayList<PostModel> postModelArrayList = new ArrayList<>();
+    private RecyclerView rv;
 
     private ApiInterface apiInterface;
     private String categoryName;
@@ -58,13 +59,36 @@ private RecyclerView rv;
     private String scirnceTopic;
     private String scirnceTopicSideMenu;
 
-    private SharedPreferences sharedPreferences ;
+    private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private TextView scienceTopicTV;
-    private ProgressBar progressBar ;
+    private ProgressBar progressBar;
 
-    private NavController navController ;
-    private NavGraph navGraph;
+    private NavController navController;
+    private SearchView searchView;
+    private String startDate;
+    private String endDate;
+    private String type;
+
+    private SharedViewModel sharedViewModel ;
+        private String searchText ;
+
+    // Index from which pagination should start (0 is 1st page in our case)
+    private static final int PAGE_START = 0;
+
+    // Indicates if footer ProgressBar is shown (i.e. next page is loading)
+    private boolean isLoading = false;
+
+    // If current page is the last page (Pagination will stop after this page load)
+    private boolean isLastPage = false;
+
+    // total no. of pages to load. Initial load is page 0, after which 2 more pages will load.
+    private int TOTAL_PAGES = 985;
+
+    // indicates the current page which Pagination is fetching.
+    private int currentPage = PAGE_START;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,44 +104,38 @@ private RecyclerView rv;
         view = inflater.inflate(R.layout.fragment_home, container, false);
         filterIV = view.findViewById(R.id.filterconstaraint);
         rv = view.findViewById(R.id.post_rv);
-        scienceTopicTV=view.findViewById(R.id.topicTV);
-        progressBar=view.findViewById(R.id.progressBar);
+        scienceTopicTV = view.findViewById(R.id.topicTV);
+        progressBar = view.findViewById(R.id.progressBar);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
-        navGraph = navController.getNavInflater().inflate(R.navigation.home_nav);
-        return view ;
+        searchView = view.findViewById(R.id.search_view);
+
+        return view;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         ((DrawerLocker) getActivity()).setDrawerEnabled(true);
         progressBar.setVisibility(View.VISIBLE);
 
 
         getCategoryNameFromCategoriesFragment();
-        getCategoryNameFromSideMenu();
-        setScienceTopicText();
 
 
-      if (navController.getGraph().getStartDestination() == R.id.homeFragment){
-          getPostFromActivity();
-
-      }
-        else {
-
-          getPost();
-
-        }
+        caseGetPost();
         onBackPressed();
         clickFilterIv();
         setUpPostRecyclerView();
         clickRv();
+        clickSearchView();
+        setScienceTopicText();
+        getViewModel();
 
 
     }
-    private void clickFilterIv(){
+      private void clickFilterIv() {
         filterIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +147,7 @@ private RecyclerView rv;
             }
         });
     }
+
     private void setUpPostRecyclerView() {
         postAdapter = new PostAdapter(postModelArrayList, requireContext());
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -144,6 +163,14 @@ private RecyclerView rv;
             public void onClick(View view, int position) {
 
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_postFragment);
+                PostModel postModel = postModelArrayList.get(position);
+
+                sharedPreferences = requireActivity().getSharedPreferences("post id", Context.MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putInt("id",postModel.getId());
+                editor.apply();
+
+
 
 
             }
@@ -154,12 +181,14 @@ private RecyclerView rv;
             }
         }));
     }
-    private void setScienceTopicText(){
-        if (navController.getGraph().getStartDestination() == R.id.homeFragment){
+
+    private void setScienceTopicText() {
+        getCategoryNameFromSideMenu();
+
+        if (navController.getGraph().getStartDestination() == R.id.homeFragment) {
             scienceTopicTV.setText(scirnceTopicSideMenu);
 
-        }
-        else {
+        } else {
 
             scienceTopicTV.setText(scirnceTopic);
 
@@ -170,7 +199,7 @@ private RecyclerView rv;
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-//                Navigation.findNavController(view).popBackStack();
+
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_categoriesFragment);
 
             }
@@ -178,10 +207,11 @@ private RecyclerView rv;
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), callback);
 
     }
+
     public void getPost() {
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
-        Call<ResultsModel> getLineClients = apiInterface.getPosts(categoryName);
-        getLineClients.enqueue(new Callback<ResultsModel>() {
+        Call<ResultsModel> getPosts = apiInterface.getPosts(categoryName );
+        getPosts.enqueue(new Callback<ResultsModel>() {
             @Override
             public void onResponse(Call<ResultsModel> call, Response<ResultsModel> response) {
                 if (response.code() == 200) {
@@ -191,13 +221,8 @@ private RecyclerView rv;
                     postModelArrayList.addAll(response.body().getPostModelList());
                     postAdapter.notifyDataSetChanged();
 
-
-
-                } else {
-
                     progressBar.setVisibility(View.INVISIBLE);
 
-                    Toast.makeText(requireContext(), "" + response.code(), Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -210,10 +235,12 @@ private RecyclerView rv;
             }
         });
     }
+
     public void getPostFromActivity() {
+
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
-        Call<ResultsModel> getLineClients = apiInterface.getPosts(categoryNameSideMenu);
-        getLineClients.enqueue(new Callback<ResultsModel>() {
+        Call<ResultsModel> getPosts = apiInterface.getPosts(categoryNameSideMenu );
+        getPosts.enqueue(new Callback<ResultsModel>() {
             @Override
             public void onResponse(Call<ResultsModel> call, Response<ResultsModel> response) {
                 if (response.code() == 200) {
@@ -222,7 +249,6 @@ private RecyclerView rv;
                     postModelArrayList.clear();
                     postModelArrayList.addAll(response.body().getPostModelList());
                     postAdapter.notifyDataSetChanged();
-
 
 
                 } else {
@@ -243,22 +269,151 @@ private RecyclerView rv;
         });
     }
 
-    private void getCategoryNameFromCategoriesFragment(){
+    private void getCategoryNameFromCategoriesFragment() {
 
         sharedPreferences = requireContext().getSharedPreferences("category name", MODE_PRIVATE);
         categoryName = sharedPreferences.getString("name", "");
         scirnceTopic = sharedPreferences.getString("topic", "");
 
     }
-    private void getCategoryNameFromSideMenu(){
+
+    private void getCategoryNameFromSideMenu() {
         sharedPreferences = requireContext().getSharedPreferences("category name in navDrawer", MODE_PRIVATE);
         categoryNameSideMenu = sharedPreferences.getString("name", "");
         scirnceTopicSideMenu = sharedPreferences.getString("topic", "");
 
     }
 
+    private void clickSearchView() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                    getSearchedPost(query);
+                    searchText = query ;
+
+
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+//                getSearchedPost(newText);
+
+
+                return false;
+            }
+        });
+
+    }
+    private void getViewModel(){
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        sharedViewModel.getSelectedDateAndType().observe(getViewLifecycleOwner(), radioButtonModel -> {
+            if (radioButtonModel != null) {
+                if (radioButtonModel.getRadBtnType() != null)
+                    type = radioButtonModel.getRadBtnType();
+                if (radioButtonModel.getRadBtnDateStart() != null)
+                    startDate = radioButtonModel.getRadBtnDateStart();
+                if (radioButtonModel.getRadBtnDateEnd() != null)
+                    endDate = radioButtonModel.getRadBtnDateEnd();
+            }
+
+            if (searchText!= null) {
+                getFilter(searchText, startDate, endDate, type);
+            }
+            else {
+                caseGetPost();
+            }
+
+        });
+    }
+
+
+
+    public void getFilter(String filter, String startDate , String endDate , String typee) {
+
+        apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
+        Call<ResultsModel> getPosts = apiInterface.getFilter(filter, categoryName, startDate, endDate, typee);
+        getPosts.enqueue(new Callback<ResultsModel>() {
+            @Override
+            public void onResponse(Call<ResultsModel> call, Response<ResultsModel> response) {
+                if (response.code() == 200) {
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    postModelArrayList.clear();
+                    postModelArrayList.addAll(response.body().getPostModelList());
+                    postAdapter.notifyDataSetChanged();
+                    
+                    if (response.body().getCount() ==0){
+                        Toast.makeText(requireContext(), "Sorry, we could not find any matches for your search.", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } else {
+
+                    progressBar.setVisibility(View.INVISIBLE);
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultsModel> call, Throwable t) {
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+
+    public void getSearchedPost(String text) {
+        apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
+        Call<ResultsModel> getPosts = apiInterface.getSearch(text, categoryName);
+        getPosts.enqueue(new Callback<ResultsModel>() {
+            @Override
+            public void onResponse(Call<ResultsModel> call, Response<ResultsModel> response) {
+                if (response.code() == 200) {
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    postModelArrayList.clear();
+                    postModelArrayList.addAll(response.body().getPostModelList());
+                    postAdapter.notifyDataSetChanged();
+
+
+                } else {
+
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    Toast.makeText(requireContext(), "" + response.code(), Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultsModel> call, Throwable t) {
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+
+
+
+    private void caseGetPost() {
+        if (navController.getGraph().getStartDestination() == R.id.homeFragment) {
+            getPostFromActivity();
+        } else {
+            getPost();
+        }
+    }
+
+
+
+
     @Override
     public void onButtonClicked(String text) {
-
     }
 }

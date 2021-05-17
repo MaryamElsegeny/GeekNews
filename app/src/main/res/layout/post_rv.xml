@@ -80,32 +80,10 @@
         android:textSize="@dimen/_16ssp"
         android:textColor="@color/gray1"
         android:maxLines="4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/_5sdp"
         />
-            <ImageButton
-                android:id="@+id/autherIV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/icon_auther"
-                app:layout_constraintTop_toBottomOf="@id/postDateTV"
-                app:layout_constraintStart_toStartOf="@id/iv"
-                app:layout_constraintEnd_toEndOf="@id/iv"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_5sdp"
-                android:background="@color/a"
 
-
-                />
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/postAutherNameRV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@id/autherIV"
-                app:layout_constraintStart_toStartOf="@id/postTypeTV"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="@dimen/_5sdp"
-
-
-                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

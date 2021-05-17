@@ -16,24 +16,19 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.geeknews.R;
 import com.example.geeknews.adapters.CategoriesAdapter;
-import com.example.geeknews.adapters.PostAdapter;
 import com.example.geeknews.classes.BottomSheetFilter;
-import com.example.geeknews.classes.BottomSheetTypeAndDate;
+import com.example.geeknews.classes.BottomSheetDate;
+import com.example.geeknews.classes.BottomSheetType;
 import com.example.geeknews.classes.RecyclerTouchListener;
-import com.example.geeknews.fragments.HomeFragment;
 import com.example.geeknews.interfaces.DrawerLocker;
 import com.example.geeknews.models.Model;
-import com.example.geeknews.models.PostModel;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
-public class MainActivity extends AppCompatActivity implements DrawerLocker , BottomSheetFilter.BottomSheetListener , BottomSheetTypeAndDate.BottomSheetListener {
+public class MainActivity extends AppCompatActivity implements DrawerLocker , BottomSheetFilter.BottomSheetListener , BottomSheetDate.BottomSheetListener ,  BottomSheetType.BottomSheetListener {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout ;
@@ -123,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
                 editor = sharedPreferences.edit();
                 editor.putString("name",model.getNameCategory());
                 editor.putString("topic",model.getCategory());
+                editor.putString("pass","pass");
+
                 editor.apply();
 
                 drawerLayout.closeDrawers();

@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
@@ -23,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.geeknews.R;
+import com.example.geeknews.classes.BottomSheetType;
+import com.example.geeknews.classes.SharedViewModel;
 
 
 public class CategoriesFragment extends Fragment {
@@ -44,6 +47,7 @@ public class CategoriesFragment extends Fragment {
 
     private NavController navController ;
     private NavGraph navGraph;
+    private SharedViewModel sharedViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,34 +93,28 @@ public class CategoriesFragment extends Fragment {
                 allBranches.getBackground().setAlpha(180);
                 nameCategory="";
                 scienceTopic="All branches";
-                saveCategory();
-                navGraph.setStartDestination(R.id.categoriesFragment);
-                navController.setGraph(navGraph);
-                Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
+                collectData();
+
             }
         });
         softwareEngineering.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 softwareEngineering.getBackground().setAlpha(180);
-                nameCategory="SoftwareEngineering";
+                nameCategory="Software Engineering";
                 scienceTopic="Software Engineering";
-                saveCategory();
-                navGraph.setStartDestination(R.id.categoriesFragment);
-                navController.setGraph(navGraph);
-                Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
+                collectData();
+
             }
         });
         programmingLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 programmingLanguage.getBackground().setAlpha(180);
-                nameCategory="Programming Languages, Compilers, Interpreters";
+                nameCategory="Programming Languages Compilers Interpreters";
                 scienceTopic="Programming Language";
-                saveCategory();
-                navGraph.setStartDestination(R.id.categoriesFragment);
-                navController.setGraph(navGraph);
-                Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
+                collectData();
+
             }
         }); databaseManagement.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,10 +122,8 @@ public class CategoriesFragment extends Fragment {
                 databaseManagement.getBackground().setAlpha(180);
                 nameCategory="Database Management";
                 scienceTopic="Database Management";
-                saveCategory();
-                navGraph.setStartDestination(R.id.categoriesFragment);
-                navController.setGraph(navGraph);
-                Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
+                collectData();
+
             }
         }); artificialIntelligence.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,10 +131,8 @@ public class CategoriesFragment extends Fragment {
                 artificialIntelligence.getBackground().setAlpha(180);
                 nameCategory="AI";
                 scienceTopic="Artificial Intelligence";
-                saveCategory();
-                navGraph.setStartDestination(R.id.categoriesFragment);
-                navController.setGraph(navGraph);
-                Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
+                collectData();
+
             }
         }); algorithm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,11 +140,8 @@ public class CategoriesFragment extends Fragment {
                 algorithm.getBackground().setAlpha(180);
                 nameCategory="Algorithm Analysis and Problem Complexity";
                 scienceTopic="Algorithm";
+                collectData();
 
-                saveCategory();
-                navGraph.setStartDestination(R.id.categoriesFragment);
-                navController.setGraph(navGraph);
-                Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
             }
         }); dataMining.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,10 +149,8 @@ public class CategoriesFragment extends Fragment {
                 dataMining.getBackground().setAlpha(180);
                 nameCategory="Data Mining and Knowledge Discovery";
                 scienceTopic="Data Mining";
-                saveCategory();
-                navGraph.setStartDestination(R.id.categoriesFragment);
-                navController.setGraph(navGraph);
-                Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
+                collectData();
+
             }
         }); informationSystem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,10 +159,8 @@ public class CategoriesFragment extends Fragment {
                 nameCategory="Management of Computing and Information Systems";
                 scienceTopic="Information Systems";
 
-                saveCategory();
-                navGraph.setStartDestination(R.id.categoriesFragment);
-                navController.setGraph(navGraph);
-                Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
+                collectData();
+
             }
         }); retrieveInformation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,15 +169,21 @@ public class CategoriesFragment extends Fragment {
                 nameCategory="Information Storage and Retrieval";
                 scienceTopic="Retrieve Information";
 
-                saveCategory();
-                navGraph.setStartDestination(R.id.categoriesFragment);
-                navController.setGraph(navGraph);
-                Navigation.findNavController(v).navigate(R.id.action_categoriesFragment_to_homeFragment);
+              collectData();
             }
         });
 
     }
+    private void collectData()
+    {
+        saveCategory();
+        navGraph.setStartDestination(R.id.categoriesFragment);
+        navController.setGraph(navGraph);
+        Navigation.findNavController(view).navigate(R.id.action_categoriesFragment_to_homeFragment);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        sharedViewModel.select("catergory");
 
+    }
     public void onBackPressed() {
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override

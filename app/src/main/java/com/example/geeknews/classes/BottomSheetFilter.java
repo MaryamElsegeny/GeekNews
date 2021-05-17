@@ -11,16 +11,28 @@ import android.widget.Button;
 import com.example.geeknews.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
+import androidx.navigation.Navigation;
 
-public class BottomSheetFilter extends BottomSheetDialogFragment implements BottomSheetTypeAndDate.BottomSheetListener {
+public class BottomSheetFilter extends BottomSheetDialogFragment implements BottomSheetDate.BottomSheetListener {
     private BottomSheetListener mListener;
     private ConstraintLayout type ;
     private ConstraintLayout date ;
    private SharedPreferences sharedPreferences ;
    private SharedPreferences.Editor editor ;
    private Button applyBtn ;
+   public String clickDoneBtn;
+    private NavController navController ;
+    private NavGraph navGraph;
+
+    private SharedViewModel sharedViewModel;
+
+
 
     @Nullable
     @Override
@@ -29,21 +41,28 @@ public class BottomSheetFilter extends BottomSheetDialogFragment implements Bott
         type = v.findViewById(R.id.consType);
         date = v.findViewById(R.id.consDate);
         applyBtn=v.findViewById(R.id.applyBtn);
-        clickDateAndType();
-        clickApplyBtn();
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+        navGraph = navController.getNavInflater().inflate(R.navigation.home_nav);
+
+
         return v;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        clickDateAndType();
+        clickApplyBtn();
+    }
 
     private void clickDateAndType(){
         type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                typeShared();
                 dismiss();
-                BottomSheetTypeAndDate bottomSheetTypeAndDate = new BottomSheetTypeAndDate();
-                bottomSheetTypeAndDate.show(requireActivity().getSupportFragmentManager(), "exampleBottomSheet");
+                BottomSheetType bottomSheetType = new BottomSheetType();
+                bottomSheetType.show(requireActivity().getSupportFragmentManager(), "exampleBottomSheet");
 
 
             }
@@ -51,10 +70,9 @@ public class BottomSheetFilter extends BottomSheetDialogFragment implements Bott
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateShared();
                 dismiss();
-                BottomSheetTypeAndDate bottomSheetTypeAndDate = new BottomSheetTypeAndDate();
-                bottomSheetTypeAndDate.show(requireActivity().getSupportFragmentManager(), "exampleBottomSheet");
+                BottomSheetDate bottomSheetDate = new BottomSheetDate();
+                bottomSheetDate.show(requireActivity().getSupportFragmentManager(), "exampleBottomSheet");
             }
         });
     }
@@ -63,14 +81,18 @@ public class BottomSheetFilter extends BottomSheetDialogFragment implements Bott
         applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 dismiss();
+
+//                sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+//                sharedViewModel.select("done");
+
             }
         });
     }
 
     @Override
     public void onButtonClicked(String text) {
-
     }
 
     public interface BottomSheetListener {
@@ -86,16 +108,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment implements Bott
                     + " must implement BottomSheetListener");
         }
     }
-    private void dateShared(){
-        sharedPreferences = requireActivity().getSharedPreferences("type", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString("type", "date");
-        editor.apply();
-    }
-    private void typeShared(){
-        sharedPreferences = requireActivity().getSharedPreferences("type", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString("type", "type");
-        editor.apply();
-    }
+
+
+
 }
