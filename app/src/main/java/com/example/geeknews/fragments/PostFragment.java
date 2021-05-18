@@ -1,6 +1,7 @@
 package com.example.geeknews.fragments;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -17,6 +18,8 @@ import retrofit2.Response;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +51,9 @@ public class PostFragment extends Fragment {
     private String categoryNameSideMenu;
     private int id ;
     private ApiInterface apiInterface;
+    private String mainArticle ;
+    private Button mainArticleBtn ;
+    private Button downloadBtn ;
 
 
 
@@ -70,6 +76,8 @@ public class PostFragment extends Fragment {
         titleTV = view.findViewById(R.id.titleTV);
         abstractTv=view.findViewById(R.id.abstract_tv);
         progressBar = view.findViewById(R.id.progressBar);
+        mainArticleBtn=view.findViewById(R.id.mainArticleBtn);
+        downloadBtn=view.findViewById(R.id.downloadBtn);
 
 
         // Inflate the layout for this fragment
@@ -83,6 +91,7 @@ public class PostFragment extends Fragment {
         setScienceTopicText();
         onBackPressed();
         getDetails();
+        clickButtons();
     }
 
     private void getCategoryNameFromSideMenu() {
@@ -142,6 +151,7 @@ public class PostFragment extends Fragment {
                    titleTV.setText(response.body().getTitle());
                    postDateTV.setText(response.body().getDate());
                    abstractTv.setText(response.body().getTextAbstract());
+                   mainArticle = response.body().getPageUrl();
 
 
                 } else {
@@ -163,4 +173,19 @@ public class PostFragment extends Fragment {
         });
     }
 
+    private void clickButtons(){
+        mainArticleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_postFragment_to_mainArticleFragment);
+                saveurl();
+            }
+        });
+    }
+    private void saveurl(){
+        sharedPreferences = requireActivity().getSharedPreferences("url", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("mainArticle",mainArticle);
+        editor.apply();
+    }
 }

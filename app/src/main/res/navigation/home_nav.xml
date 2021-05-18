@@ -120,6 +120,13 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_postFragment_to_mainArticleFragment"
+            app:destination="@id/mainArticleFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/bottomSheetFilter"
@@ -133,4 +140,9 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+    <fragment
+        android:id="@+id/mainArticleFragment"
+        android:name="com.example.geeknews.fragments.MainArticleFragment"
+        android:label="fragment_main_article"
+        tools:layout="@layout/fragment_main_article" />
 </navigation>
