@@ -82,7 +82,6 @@
                     android:id="@+id/profile_iv_signup"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:src="@drawable/profile"
                     app:civ_border_color="@color/gray2"
                     app:civ_border_width="2dp"
                     app:layout_constraintDimensionRatio="1:1"
@@ -103,7 +102,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/profile_iv_signup"
-
                     app:layout_constraintWidth_percent="0.77">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -225,86 +223,86 @@
                     app:layout_constraintStart_toStartOf="@id/passField"
                     app:layout_constraintTop_toBottomOf="@id/passField" />
 
-                <LinearLayout
-                    android:id="@+id/linear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    app:layout_constraintBottom_toTopOf="@id/googleBtn"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/signUp_btn">
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/linear"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/_5sdp"-->
+<!--                    app:layout_constraintBottom_toTopOf="@id/googleBtn"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/signUp_btn">-->
 
-                    <View
-                        android:layout_width="@dimen/_80sdp"
-                        android:layout_height="0.8dp"
-                        android:layout_gravity="center"
-                        android:background="@color/gray" />
+<!--                    <View-->
+<!--                        android:layout_width="@dimen/_80sdp"-->
+<!--                        android:layout_height="0.8dp"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:background="@color/gray" />-->
 
-                    <TextView
-                        android:id="@+id/orTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:text="OR"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_15ssp"
-
-
-                        />
-
-                    <View
-                        android:layout_width="@dimen/_80sdp"
-                        android:layout_height="0.8dp"
-                        android:layout_gravity="center"
-                        android:background="@color/gray" />
-                </LinearLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/orTV"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:layout_marginStart="@dimen/_10sdp"-->
+<!--                        android:layout_marginEnd="@dimen/_10sdp"-->
+<!--                        android:text="OR"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="@dimen/_15ssp"-->
 
 
-                <Button
-                    android:id="@+id/googleBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/button_shadow"
-                    android:backgroundTint="@color/white"
-                    android:drawableStart="@drawable/google"
-                    android:drawableLeft="@drawable/google"
-                    android:drawablePadding="@dimen/_3sdp"
-                    android:padding="@dimen/_5sdp"
-                    android:paddingEnd="@dimen/_5sdp"
-                    android:paddingRight="@dimen/_3sdp"
-                    android:shadowColor="@color/gray_dark"
-                    android:text="@string/google"
-                    android:textAllCaps="false"
-                    app:layout_constraintEnd_toStartOf="@id/facebookBtn"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/linear" />
+<!--                        />-->
 
-                <Button
-                    android:id="@+id/facebookBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/login_shape"
-                    android:backgroundTint="@color/bluefacebook"
-                    android:drawableStart="@drawable/facebook"
-                    android:drawableLeft="@drawable/facebook"
-                    android:drawablePadding="@dimen/_3sdp"
-                    android:padding="@dimen/_5sdp"
-                    android:paddingEnd="@dimen/_5sdp"
-                    android:paddingRight="@dimen/_3sdp"
-                    android:shadowColor="@color/gray_dark"
-                    android:text="@string/facebook"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/googleBtn"
-                    app:layout_constraintTop_toBottomOf="@id/linear"
+<!--                    <View-->
+<!--                        android:layout_width="@dimen/_80sdp"-->
+<!--                        android:layout_height="0.8dp"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:background="@color/gray" />-->
+<!--                </LinearLayout>-->
 
-                    />
+
+<!--                <Button-->
+<!--                    android:id="@+id/googleBtn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/_5sdp"-->
+<!--                    android:background="@drawable/button_shadow"-->
+<!--                    android:backgroundTint="@color/white"-->
+<!--                    android:drawableStart="@drawable/google"-->
+<!--                    android:drawableLeft="@drawable/google"-->
+<!--                    android:drawablePadding="@dimen/_3sdp"-->
+<!--                    android:padding="@dimen/_5sdp"-->
+<!--                    android:paddingEnd="@dimen/_5sdp"-->
+<!--                    android:paddingRight="@dimen/_3sdp"-->
+<!--                    android:shadowColor="@color/gray_dark"-->
+<!--                    android:text="@string/google"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    app:layout_constraintEnd_toStartOf="@id/facebookBtn"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/linear" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/facebookBtn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/_5sdp"-->
+<!--                    android:background="@drawable/login_shape"-->
+<!--                    android:backgroundTint="@color/bluefacebook"-->
+<!--                    android:drawableStart="@drawable/facebook"-->
+<!--                    android:drawableLeft="@drawable/facebook"-->
+<!--                    android:drawablePadding="@dimen/_3sdp"-->
+<!--                    android:padding="@dimen/_5sdp"-->
+<!--                    android:paddingEnd="@dimen/_5sdp"-->
+<!--                    android:paddingRight="@dimen/_3sdp"-->
+<!--                    android:shadowColor="@color/gray_dark"-->
+<!--                    android:text="@string/facebook"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/googleBtn"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/linear"-->
+
+<!--                    />-->
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

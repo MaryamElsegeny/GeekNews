@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,6 @@ import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
-
 public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSheetListener {
 
     private View view;
@@ -70,8 +70,10 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
     private String endDate;
     private String type;
 
-    private SharedViewModel sharedViewModel ;
-        private String searchText ;
+    private int page = 1;
+
+    private SharedViewModel sharedViewModel;
+    private String searchText;
 
     // Index from which pagination should start (0 is 1st page in our case)
     private static final int PAGE_START = 0;
@@ -88,8 +90,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
     // indicates the current page which Pagination is fetching.
     private int currentPage = PAGE_START;
 
-
-
+     boolean searsh = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,11 +120,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         ((DrawerLocker) getActivity()).setDrawerEnabled(true);
         progressBar.setVisibility(View.VISIBLE);
-
-
         getCategoryNameFromCategoriesFragment();
-
-
         caseGetPost();
         onBackPressed();
         clickFilterIv();
@@ -132,10 +129,10 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
         clickSearchView();
         setScienceTopicText();
         getViewModel();
-
-
+        initScrollListener();
     }
-      private void clickFilterIv() {
+
+    private void clickFilterIv() {
         filterIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +140,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
 
                 BottomSheetFilter bottomSheet = new BottomSheetFilter();
                 bottomSheet.show(requireActivity().getSupportFragmentManager(), "exampleBottomSheet");
-
             }
         });
     }
@@ -167,12 +163,8 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
 
                 sharedPreferences = requireActivity().getSharedPreferences("post id", Context.MODE_PRIVATE);
                 editor = sharedPreferences.edit();
-                editor.putInt("id",postModel.getId());
+                editor.putInt("id", postModel.getId());
                 editor.apply();
-
-
-
-
             }
 
             @Override
@@ -187,11 +179,9 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
 
         if (navController.getGraph().getStartDestination() == R.id.homeFragment) {
             scienceTopicTV.setText(scirnceTopicSideMenu);
-
         } else {
 
             scienceTopicTV.setText(scirnceTopic);
-
         }
     }
 
@@ -205,25 +195,22 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), callback);
-
     }
 
     public void getPost() {
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
-        Call<ResultsModel> getPosts = apiInterface.getPosts(categoryName );
+        Call<ResultsModel> getPosts = apiInterface.getPosts(categoryName, page);
         getPosts.enqueue(new Callback<ResultsModel>() {
             @Override
             public void onResponse(Call<ResultsModel> call, Response<ResultsModel> response) {
                 if (response.code() == 200) {
                     progressBar.setVisibility(View.INVISIBLE);
 
-                    postModelArrayList.clear();
+                    //postModelArrayList.clear();
                     postModelArrayList.addAll(response.body().getPostModelList());
                     postAdapter.notifyDataSetChanged();
-
+                    isLoading = false;
                     progressBar.setVisibility(View.INVISIBLE);
-
-
                 }
             }
 
@@ -231,7 +218,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             public void onFailure(Call<ResultsModel> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
-
             }
         });
     }
@@ -239,24 +225,23 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
     public void getPostFromActivity() {
 
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
-        Call<ResultsModel> getPosts = apiInterface.getPosts(categoryNameSideMenu );
+        Call<ResultsModel> getPosts = apiInterface.getPosts(categoryNameSideMenu, page);
         getPosts.enqueue(new Callback<ResultsModel>() {
             @Override
             public void onResponse(Call<ResultsModel> call, Response<ResultsModel> response) {
                 if (response.code() == 200) {
                     progressBar.setVisibility(View.INVISIBLE);
 
-                    postModelArrayList.clear();
+//                    postModelArrayList.clear();
                     postModelArrayList.addAll(response.body().getPostModelList());
+                    isLoading = false;
+
                     postAdapter.notifyDataSetChanged();
-
-
                 } else {
 
                     progressBar.setVisibility(View.INVISIBLE);
 
                     Toast.makeText(requireContext(), "" + response.code(), Toast.LENGTH_SHORT).show();
-
                 }
             }
 
@@ -264,7 +249,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             public void onFailure(Call<ResultsModel> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
-
             }
         });
     }
@@ -274,14 +258,12 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
         sharedPreferences = requireContext().getSharedPreferences("category name", MODE_PRIVATE);
         categoryName = sharedPreferences.getString("name", "");
         scirnceTopic = sharedPreferences.getString("topic", "");
-
     }
 
     private void getCategoryNameFromSideMenu() {
         sharedPreferences = requireContext().getSharedPreferences("category name in navDrawer", MODE_PRIVATE);
         categoryNameSideMenu = sharedPreferences.getString("name", "");
         scirnceTopicSideMenu = sharedPreferences.getString("topic", "");
-
     }
 
     private void clickSearchView() {
@@ -290,49 +272,48 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                    getSearchedPost(query);
-                    searchText = query ;
+                postModelArrayList.clear();
+                getSearchedPost(query);
 
-
+                searsh = true ;
+                searchText = query;
 
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-//                getSearchedPost(newText);
-
+                //                getSearchedPost(newText);
 
                 return false;
             }
         });
-
     }
-    private void getViewModel(){
+
+    private void getViewModel() {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         sharedViewModel.getSelectedDateAndType().observe(getViewLifecycleOwner(), radioButtonModel -> {
             if (radioButtonModel != null) {
-                if (radioButtonModel.getRadBtnType() != null)
+                if (radioButtonModel.getRadBtnType() != null) {
                     type = radioButtonModel.getRadBtnType();
-                if (radioButtonModel.getRadBtnDateStart() != null)
+                }
+                if (radioButtonModel.getRadBtnDateStart() != null) {
                     startDate = radioButtonModel.getRadBtnDateStart();
-                if (radioButtonModel.getRadBtnDateEnd() != null)
+                }
+                if (radioButtonModel.getRadBtnDateEnd() != null) {
                     endDate = radioButtonModel.getRadBtnDateEnd();
+                }
             }
 
-            if (searchText!= null) {
+            if (searchText != null) {
                 getFilter(searchText, startDate, endDate, type);
-            }
-            else {
+            } else {
                 caseGetPost();
             }
-
         });
     }
 
-
-
-    public void getFilter(String filter, String startDate , String endDate , String typee) {
+    public void getFilter(String filter, String startDate, String endDate, String typee) {
 
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
         Call<ResultsModel> getPosts = apiInterface.getFilter(filter, categoryName, startDate, endDate, typee);
@@ -345,17 +326,13 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     postModelArrayList.clear();
                     postModelArrayList.addAll(response.body().getPostModelList());
                     postAdapter.notifyDataSetChanged();
-                    
-                    if (response.body().getCount() ==0){
+
+                    if (response.body().getCount() == 0) {
                         Toast.makeText(requireContext(), "Sorry, we could not find any matches for your search.", Toast.LENGTH_SHORT).show();
                     }
-
-
                 } else {
 
                     progressBar.setVisibility(View.INVISIBLE);
-
-
                 }
             }
 
@@ -363,31 +340,30 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             public void onFailure(Call<ResultsModel> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
-
             }
         });
     }
 
     public void getSearchedPost(String text) {
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
-        Call<ResultsModel> getPosts = apiInterface.getSearch(text, categoryName);
+        Toast.makeText(requireContext(), ""+page, Toast.LENGTH_SHORT).show();
+        Call<ResultsModel> getPosts = apiInterface.getSearch(text, categoryName,page);
         getPosts.enqueue(new Callback<ResultsModel>() {
             @Override
             public void onResponse(Call<ResultsModel> call, Response<ResultsModel> response) {
                 if (response.code() == 200) {
                     progressBar.setVisibility(View.INVISIBLE);
 
-                    postModelArrayList.clear();
+//                    postModelArrayList.clear();
                     postModelArrayList.addAll(response.body().getPostModelList());
+                    isLoading = false;
+
                     postAdapter.notifyDataSetChanged();
-
-
                 } else {
 
                     progressBar.setVisibility(View.INVISIBLE);
 
                     Toast.makeText(requireContext(), "" + response.code(), Toast.LENGTH_SHORT).show();
-
                 }
             }
 
@@ -395,25 +371,75 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             public void onFailure(Call<ResultsModel> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
-
             }
         });
     }
 
-
-
     private void caseGetPost() {
         if (navController.getGraph().getStartDestination() == R.id.homeFragment) {
+            postModelArrayList.clear();
             getPostFromActivity();
         } else {
+            postModelArrayList.clear();
             getPost();
         }
     }
 
-
-
-
     @Override
     public void onButtonClicked(String text) {
     }
+
+    private void initScrollListener() {
+        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (!isLoading) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == postModelArrayList.size() - 1 ) {
+                        //bottom of list!
+                        //loadMore();
+                        page = page+1;
+                        if (searsh && linearLayoutManager.findLastCompletelyVisibleItemPosition() != 0) {
+                      getSearchedPost(searchText);
+                        }
+                        if (navController.getGraph().getStartDestination() == R.id.homeFragment) {
+                            getPostFromActivity();
+                        } else {
+                            getPost();
+                        }
+
+                        isLoading = true;
+                    }
+                }
+            }
+        });
+    }
+
+/*  private void loadMore() {
+    postModelArrayList.add(null);
+    postAdapter.notifyItemInserted(postModelArrayList.size() - 1);
+    Handler handler = new Handler();
+    handler.postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        postModelArrayList.remove(postModelArrayList.size() - 1);
+        int scrollPosition = postModelArrayList.size();
+        postAdapter.notifyItemRemoved(scrollPosition);
+        int currentSize = scrollPosition;
+        int nextLimit = currentSize + 10;
+        while (currentSize - 1 < nextLimit) {
+          //postModelArrayList.add("Number " + currentSize);
+          currentSize++;
+        }
+        postAdapter.notifyDataSetChanged();
+        isLoading = false;
+      }
+    }, 2000);
+  }*/
 }

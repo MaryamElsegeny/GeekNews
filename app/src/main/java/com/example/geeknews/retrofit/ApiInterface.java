@@ -14,10 +14,10 @@ public interface ApiInterface {
 
 
     @GET("api/")
-    Call<ResultsModel> getPosts(@Query("category") String category );
+    Call<ResultsModel> getPosts(@Query("category") String category , @Query("page") int pageNumber);
 
     @GET("api/")
-    Call<ResultsModel> getSearch(@Query("search") String search , @Query("category") String category);
+    Call<ResultsModel> getSearch(@Query("search") String search , @Query("category") String category , @Query("page") int pageNumber);
 
     @GET("api/")
     Call<ResultsModel> getFilter(@Query("search") String search , @Query("category") String category ,@Query("publicationdate__gte") String startDate , @Query("publicationdate__lte") String endDate , @Query("contenttype") String contenttype);

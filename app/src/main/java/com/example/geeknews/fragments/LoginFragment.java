@@ -39,7 +39,7 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         loginBtn = view.findViewById(R.id.login_btn);
         signUpTV = view.findViewById(R.id.sign_up_tv);
-        forgetPassTV = view.findViewById(R.id.forgetPassTV);
+//        forgetPassTV = view.findViewById(R.id.forgetPassTV);
         // Inflate the layout for this fragment
         return view ;
     }
@@ -51,7 +51,7 @@ public class LoginFragment extends Fragment {
         onBackPressed();
        clickLoginBtn();
        clickSignUpTV();
-       clickForgetPassTV();
+//       clickForgetPassTV();
         ((DrawerLocker) getActivity()).setDrawerEnabled(false);
 
     }
@@ -75,15 +75,15 @@ public class LoginFragment extends Fragment {
             }
         });
     }
-    private void clickForgetPassTV(){
-        forgetPassTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                forgetPassTV.setTextColor(Color.parseColor("#0d6db1"));
-                Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_forgetPassFragment);
-            }
-        });
-    }
+//    private void clickForgetPassTV(){
+//        forgetPassTV.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                forgetPassTV.setTextColor(Color.parseColor("#0d6db1"));
+//                Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_forgetPassFragment);
+//            }
+//        });
+//    }
     public void onBackPressed() {
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override

@@ -163,65 +163,65 @@
                     android:minHeight="@dimen/_40sdp"
                     />
 
-                <TextView
-                    android:id="@+id/forgetPassTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/forget_pass"
-                    android:textSize="@dimen/_12ssp"
-                    app:layout_constraintEnd_toEndOf="@id/login_btn"
-                    app:layout_constraintStart_toStartOf="@id/login_btn"
-                    app:layout_constraintTop_toBottomOf="@id/login_btn"
-                    />
+<!--                <TextView-->
+<!--                    android:id="@+id/forgetPassTV"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/_10sdp"-->
+<!--                    android:text="@string/forget_pass"-->
+<!--                    android:textSize="@dimen/_12ssp"-->
+<!--                    app:layout_constraintEnd_toEndOf="@id/login_btn"-->
+<!--                    app:layout_constraintStart_toStartOf="@id/login_btn"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/login_btn"-->
+<!--                    />-->
 
-                <Button
-                    android:id="@+id/googleBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/facebookBtn"
-                    app:layout_constraintTop_toBottomOf="@id/forgetPassTV"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:shadowColor="@color/gray_dark"
-                    android:backgroundTint="@color/white"
-                    android:background="@drawable/button_shadow"
-                    android:text="@string/sign_in"
-                    android:drawableStart="@drawable/google"
-                    android:drawableLeft="@drawable/google"
-                    android:padding="@dimen/_5sdp"
-                    android:drawablePadding="@dimen/_3sdp"
-                    android:paddingEnd="@dimen/_5sdp"
-                    android:paddingRight="@dimen/_3sdp"
-                    android:textAllCaps="false"
-                    />
-                <Button
-                    android:id="@+id/facebookBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@id/googleBtn"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/forgetPassTV"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:shadowColor="@color/gray_dark"
-                    android:backgroundTint="@color/white"
-                    android:background="@drawable/button_shadow"
-                    android:text="@string/sign_in"
-                    android:drawableStart="@drawable/facebook"
-                    android:drawableLeft="@drawable/facebook"
-                    android:padding="@dimen/_5sdp"
-                    android:paddingEnd="@dimen/_5sdp"
-                    android:drawablePadding="@dimen/_3sdp"
-                    android:paddingRight="@dimen/_3sdp"
-                    android:textAllCaps="false"
-                    />
+<!--                <Button-->
+<!--                    android:id="@+id/googleBtn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintEnd_toStartOf="@id/facebookBtn"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/forgetPassTV"-->
+<!--                    android:layout_marginTop="@dimen/_10sdp"-->
+<!--                    android:shadowColor="@color/gray_dark"-->
+<!--                    android:backgroundTint="@color/white"-->
+<!--                    android:background="@drawable/button_shadow"-->
+<!--                    android:text="@string/sign_in"-->
+<!--                    android:drawableStart="@drawable/google"-->
+<!--                    android:drawableLeft="@drawable/google"-->
+<!--                    android:padding="@dimen/_5sdp"-->
+<!--                    android:drawablePadding="@dimen/_3sdp"-->
+<!--                    android:paddingEnd="@dimen/_5sdp"-->
+<!--                    android:paddingRight="@dimen/_3sdp"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    />-->
+<!--                <Button-->
+<!--                    android:id="@+id/facebookBtn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/googleBtn"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/forgetPassTV"-->
+<!--                    android:layout_marginTop="@dimen/_10sdp"-->
+<!--                    android:shadowColor="@color/gray_dark"-->
+<!--                    android:backgroundTint="@color/white"-->
+<!--                    android:background="@drawable/button_shadow"-->
+<!--                    android:text="@string/sign_in"-->
+<!--                    android:drawableStart="@drawable/facebook"-->
+<!--                    android:drawableLeft="@drawable/facebook"-->
+<!--                    android:padding="@dimen/_5sdp"-->
+<!--                    android:paddingEnd="@dimen/_5sdp"-->
+<!--                    android:drawablePadding="@dimen/_3sdp"-->
+<!--                    android:paddingRight="@dimen/_3sdp"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    />-->
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="@id/googleBtn"
-                    app:layout_constraintEnd_toEndOf="@id/facebookBtn"
-                    app:layout_constraintTop_toBottomOf="@id/googleBtn"
+                    app:layout_constraintEnd_toEndOf="@id/login_btn"
+                    app:layout_constraintStart_toStartOf="@id/login_btn"
+                    app:layout_constraintTop_toBottomOf="@id/login_btn"
                     android:gravity="center"
                     android:layout_marginTop="@dimen/_10sdp"
                    >
