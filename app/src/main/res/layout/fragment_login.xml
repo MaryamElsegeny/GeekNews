@@ -100,12 +100,12 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
+                        android:inputType="text"
                         android:textSize="@dimen/_12ssp"
                         android:minHeight="@dimen/_40sdp"
                         android:background="@drawable/login_shape"
                         android:backgroundTint="@color/gray3"
-                        android:hint="@string/email"
+                        android:hint="@string/userName"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/black"
                         />
