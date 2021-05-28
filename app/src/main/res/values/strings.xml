@@ -12,7 +12,7 @@
     <string name="sign_in"> sign in</string>
     <string name="sign_up_with_line"><u>sign up</u></string>
     <string name="sign_up">sign up</string>
-    <string name="userName">username</string>
+    <string name="userName">UserName</string>
     <string name="phone">phone number</string>
     <string name="facebook">facebook</string>
     <string name="google">google</string>
@@ -45,6 +45,8 @@
     <string name="information_systems">Information Systems</string>
     <string name="data_mining">Data Mining</string>
     <string name="choose_your_interest">Choose your interest</string>
+    <string name="last_name">Last Name</string>
+    <string name="logout">logout</string>
 
 
 </resources>

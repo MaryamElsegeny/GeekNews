@@ -72,26 +72,26 @@
 
 
                 <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/gdh24"
+                    android:id="@+id/gdh30"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.24" />
+                    app:layout_constraintGuide_percent="0.30" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_iv_signup"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    app:civ_border_color="@color/gray2"
-                    app:civ_border_width="2dp"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/gdh24"
-                    app:layout_constraintWidth_percent="0.25"
+<!--                <de.hdodenhof.circleimageview.CircleImageView-->
+<!--                    android:id="@+id/profile_iv_signup"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    app:civ_border_color="@color/gray2"-->
+<!--                    app:civ_border_width="2dp"-->
+<!--                    app:layout_constraintDimensionRatio="1:1"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/gdh24"-->
+<!--                    app:layout_constraintWidth_percent="0.25"-->
 
 
-                    />
+<!--                    />-->
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/userNameField"
@@ -101,7 +101,7 @@
                     app:boxStrokeColor="@color/gray3"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/profile_iv_signup"
+                    app:layout_constraintTop_toBottomOf="@id/gdh30"
                     app:layout_constraintWidth_percent="0.77">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -127,7 +127,7 @@
                     app:boxStrokeColor="@color/gray3"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/userNameField"
+                    app:layout_constraintTop_toBottomOf="@id/lastNameField"
                     app:layout_constraintWidth_percent="0.77"
 
 
@@ -148,14 +148,14 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/phoneField"
+                    android:id="@+id/firstNameField"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
                     app:boxStrokeColor="@color/gray3"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/emailField"
+                    app:layout_constraintTop_toBottomOf="@id/userNameField"
                     app:layout_constraintWidth_percent="0.77"
 
 
@@ -166,8 +166,36 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/login_shape"
                         android:backgroundTint="@color/gray3"
-                        android:hint="@string/phone"
-                        android:inputType="phone"
+                        android:hint="First Name"
+                        android:inputType="text"
+                        android:minHeight="@dimen/_40sdp"
+                        android:paddingStart="@dimen/_7sdp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        android:paddingLeft="@dimen/_7sdp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lastNameField"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    app:boxStrokeColor="@color/gray3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/firstNameField"
+                    app:layout_constraintWidth_percent="0.77"
+
+
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/login_shape"
+                        android:backgroundTint="@color/gray3"
+                        android:hint="@string/last_name"
+                        android:inputType="text"
                         android:minHeight="@dimen/_40sdp"
                         android:paddingStart="@dimen/_7sdp"
                         android:textColor="@color/black"
@@ -182,9 +210,8 @@
                     app:boxStrokeColor="@color/gray3"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/phoneField"
+                    app:layout_constraintTop_toBottomOf="@id/emailField"
                     app:layout_constraintWidth_percent="0.77"
-
                     app:passwordToggleDrawable="@drawable/show_password_selector"
                     app:passwordToggleEnabled="true"
 
