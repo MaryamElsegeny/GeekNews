@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
     // indicates the current page which Pagination is fetching.
     private int currentPage = PAGE_START;
 
-     boolean searsh = false;
+     String requestType = "";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +109,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
         progressBar = view.findViewById(R.id.progressBar);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         searchView = view.findViewById(R.id.search_view);
-
         return view;
     }
 
@@ -275,7 +274,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                 postModelArrayList.clear();
                 getSearchedPost(query);
 
-                searsh = true ;
+                requestType = "search" ;
                 searchText = query;
 
                 return false;
@@ -306,6 +305,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             }
 
             if (searchText != null) {
+                postModelArrayList.clear();
                 getFilter(searchText, startDate, endDate, type);
             } else {
                 caseGetPost();
@@ -314,7 +314,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
     }
 
     public void getFilter(String filter, String startDate, String endDate, String typee) {
-
+            requestType = "filter" ;
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
         Call<ResultsModel> getPosts = apiInterface.getFilter(filter, categoryName, startDate, endDate, typee);
         getPosts.enqueue(new Callback<ResultsModel>() {
@@ -323,8 +323,10 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                 if (response.code() == 200) {
                     progressBar.setVisibility(View.INVISIBLE);
 
-                    postModelArrayList.clear();
+//                    postModelArrayList.clear();
                     postModelArrayList.addAll(response.body().getPostModelList());
+                    isLoading = false;
+
                     postAdapter.notifyDataSetChanged();
 
                     if (response.body().getCount() == 0) {
@@ -359,7 +361,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     isLoading = false;
 
                     postAdapter.notifyDataSetChanged();
-                } else {
+                } else if (response.code()==404){
 
                     progressBar.setVisibility(View.INVISIBLE);
 
@@ -401,19 +403,23 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (!isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == postModelArrayList.size() - 1 ) {
+                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() != -1
+                                && linearLayoutManager.findLastCompletelyVisibleItemPosition() == postModelArrayList.size() - 1) {
                         //bottom of list!
                         //loadMore();
                         page = page+1;
-                        if (searsh && linearLayoutManager.findLastCompletelyVisibleItemPosition() != 0) {
+                        if (requestType == "search" && postModelArrayList.size()>0) {
                       getSearchedPost(searchText);
+                        }else if (requestType == "filter" && postModelArrayList.size()>0) {
+                                getFilter(searchText, startDate, endDate, type);
                         }
-                        if (navController.getGraph().getStartDestination() == R.id.homeFragment) {
-                            getPostFromActivity();
-                        } else {
-                            getPost();
+                        else {
+                            if (navController.getGraph().getStartDestination() == R.id.homeFragment) {
+                                getPostFromActivity();
+                            } else {
+                                getPost();
+                            }
                         }
-
                         isLoading = true;
                     }
                 }
