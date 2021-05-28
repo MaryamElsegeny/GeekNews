@@ -211,6 +211,10 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     isLoading = false;
                     progressBar.setVisibility(View.INVISIBLE);
                 }
+                else if (response.code()==404){
+                    progressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -236,11 +240,9 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     isLoading = false;
 
                     postAdapter.notifyDataSetChanged();
-                } else {
-
+                }   else if (response.code()==404){
                     progressBar.setVisibility(View.INVISIBLE);
-
-                    Toast.makeText(requireContext(), "" + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -332,9 +334,9 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     if (response.body().getCount() == 0) {
                         Toast.makeText(requireContext(), "Sorry, we could not find any matches for your search.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-
+                }   else if (response.code()==404){
                     progressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -361,11 +363,9 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     isLoading = false;
 
                     postAdapter.notifyDataSetChanged();
-                } else if (response.code()==404){
-
+                }   else if (response.code()==404){
                     progressBar.setVisibility(View.INVISIBLE);
-
-                    Toast.makeText(requireContext(), "" + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
                 }
             }
 
