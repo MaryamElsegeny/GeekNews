@@ -229,18 +229,6 @@ public class PostFragment extends Fragment {
 
     private void startDownloading() {
 
-
-//        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(downloadArticle));
-//        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-//        request.setTitle("Download");
-//        request.setDescription("Download file ..... " + i);
-//        request.allowScanningByMediaScanner();
-//        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-//        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "" + System.currentTimeMillis());
-//        request.setDestinationInExternalFilesDir(requireContext() ,    Environment.DIRECTORY_DOWNLOADS , "Downloads");
-//        DownloadManager manager = (DownloadManager) requireActivity().getSystemService(DOWNLOAD_SERVICE);
-//        manager.enqueue(request);
-
     if (downloadArticle.equals("pdf") || downloadArticle.equals("https://www.nature.com/articles/s42979-020-00397-4.pdf")){
         Toast.makeText(requireContext(), "No pdf for this article", Toast.LENGTH_SHORT).show();
 

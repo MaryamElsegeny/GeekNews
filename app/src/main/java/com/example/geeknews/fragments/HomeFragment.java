@@ -275,7 +275,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
 
                 postModelArrayList.clear();
                 getSearchedPost(query);
-
                 requestType = "search" ;
                 searchText = query;
 
@@ -284,7 +283,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //                getSearchedPost(newText);
 
                 return false;
             }
@@ -350,7 +348,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
 
     public void getSearchedPost(String text) {
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
-        Toast.makeText(requireContext(), ""+page, Toast.LENGTH_SHORT).show();
         Call<ResultsModel> getPosts = apiInterface.getSearch(text, categoryName,page);
         getPosts.enqueue(new Callback<ResultsModel>() {
             @Override
