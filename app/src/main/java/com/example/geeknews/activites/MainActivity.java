@@ -12,10 +12,16 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.geeknews.R;
 import com.example.geeknews.adapters.CategoriesAdapter;
@@ -41,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
     private SharedPreferences.Editor editor;
     private NavController navController ;
     private NavGraph navGraph;
+    private String message ;
+    private TextView logoutTv ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +62,14 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
         actionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
          navController = Navigation.findNavController(this, R.id.nav_host_fragment);
          navGraph = navController.getNavInflater().inflate(R.navigation.home_nav);
-
+        checkStartDistenation();
+        clickLogout();
 
     }
     private void findId(){
         toolbar =  findViewById(R.id.toolbar_actionbar);
         drawerLayout = findViewById(R.id.drawer_layout);
+        logoutTv= findViewById(R.id.logout);
     }
 
 
@@ -147,4 +158,36 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
     public void onButtonClicked(String text) {
 
     }
+    private void getStartScreen(){
+        Intent intent = getIntent();
+        message = intent.getStringExtra("save user");
+    }
+    private void checkStartDistenation() {
+        getStartScreen();
+        if (message.equals("user login")) {
+            navGraph.setStartDestination(R.id.categoriesFragment);
+            navController.setGraph(navGraph);
+        } else if (message.equals("user not login")) {
+            navGraph.setStartDestination(R.id.loginFragment);
+            navController.setGraph(navGraph);
+        }
+    }
+    private void clickLogout(){
+        logoutTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickDialogLogout();
+
+            }
+        });
+    }
+    public void clickDialogLogout(){
+                navGraph.setStartDestination(R.id.loginFragment);
+                navController.setGraph(navGraph);
+                SharedPreferences  prefs = getSharedPreferences("saveUserLogin", 0);
+                SharedPreferences.Editor edit = prefs.edit();
+                edit.clear();
+                edit.commit();
+
+            }
 }

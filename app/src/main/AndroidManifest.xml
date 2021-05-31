@@ -19,6 +19,7 @@
         android:windowSoftInputMode="adjustResize"
         tools:ignore="GoogleAppIndexingWarning"
         android:usesCleartextTraffic="true"
+
         >
 
 

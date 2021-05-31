@@ -3,6 +3,7 @@ package com.example.geeknews.activites;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -24,8 +25,19 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 try {
                     Thread.sleep( 1800 );
-                    Intent intent = new Intent(SplashActivity.this , MainActivity.class);
-                    startActivity(intent);
+                    SharedPreferences Loginprefs =  getSharedPreferences("saveUserLogin", 0);
+                    boolean userLoginStatus = Loginprefs.getBoolean("saveUserLogin", false);
+
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+
+                    if(userLoginStatus == (true)) {
+                        intent.putExtra("save user", "user login");
+                        startActivity(intent);
+                    }
+                    else {
+                        intent.putExtra("save user", "user not login");
+                        startActivity(intent);
+                    }
                 }
                 catch (Exception e){
 

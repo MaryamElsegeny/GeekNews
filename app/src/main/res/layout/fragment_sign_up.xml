@@ -105,6 +105,7 @@
                     app:layout_constraintWidth_percent="0.77">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/userNameEd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/login_shape"
@@ -134,6 +135,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/emailEd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/login_shape"
@@ -162,6 +164,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/firstNameEd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/login_shape"
@@ -190,6 +193,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/lastNameEd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/login_shape"
@@ -218,6 +222,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/passEd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/login_shape"
@@ -229,6 +234,38 @@
                         android:paddingLeft="@dimen/_7sdp"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12ssp" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/passConfField"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:boxStrokeColor="@color/gray3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/passField"
+                    app:layout_constraintWidth_percent="0.77"
+                    app:passwordToggleDrawable="@drawable/show_password_selector"
+                    app:passwordToggleEnabled="true"
+
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/passConfEd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/login_shape"
+                        android:backgroundTint="@color/gray3"
+                        android:hint="@string/confirm_password"
+                        android:inputType="textPassword"
+                        android:minHeight="@dimen/_40sdp"
+                        android:paddingStart="@dimen/_7sdp"
+                        android:paddingLeft="@dimen/_7sdp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp" />
+
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -248,8 +285,19 @@
 
                     app:layout_constraintEnd_toEndOf="@id/passField"
                     app:layout_constraintStart_toStartOf="@id/passField"
-                    app:layout_constraintTop_toBottomOf="@id/passField" />
+                    app:layout_constraintTop_toBottomOf="@id/passConfField" />
 
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:visibility="invisible"
+                    app:layout_constraintTop_toBottomOf="@id/signUp_btn"
+                    android:indeterminateTint="@color/gray2"
+                    android:layout_marginTop="@dimen/_10sdp"
+
+                    />
 <!--                <LinearLayout-->
 <!--                    android:id="@+id/linear"-->
 <!--                    android:layout_width="wrap_content"-->

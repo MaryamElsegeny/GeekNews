@@ -42,6 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSheetListener {
@@ -220,7 +221,8 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             @Override
             public void onFailure(Call<ResultsModel> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "onFailure: "+t);
+//                Toast.makeText(requireContext(), "No Internet Connection" , Toast.LENGTH_LONG).show();
             }
         });
     }

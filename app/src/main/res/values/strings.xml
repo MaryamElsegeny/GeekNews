@@ -47,6 +47,7 @@
     <string name="choose_your_interest">Choose your interest</string>
     <string name="last_name">Last Name</string>
     <string name="logout">logout</string>
+    <string name="confirm_password">Confirm password</string>
 
 
 </resources>

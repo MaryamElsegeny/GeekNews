@@ -98,6 +98,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/emailEd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
@@ -131,6 +132,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/passEd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
@@ -217,6 +219,7 @@
 <!--                    />-->
 
                 <LinearLayout
+                    android:id="@+id/linear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="@id/login_btn"
@@ -244,6 +247,17 @@
                         android:layout_marginLeft="@dimen/_7sdp" />
 
                 </LinearLayout>
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:visibility="invisible"
+                    app:layout_constraintTop_toBottomOf="@id/linear"
+                    android:indeterminateTint="@color/gray2"
+                    android:layout_marginTop="@dimen/_10sdp"
+
+                    />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
