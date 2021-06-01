@@ -25,6 +25,7 @@ public class RetrofitFactory {
             public Response intercept(Chain chain) throws IOException {
                 Request newRequest  = chain.request().newBuilder()
                         .addHeader("Authorization", "Bearer " + MyApplication.tokenApplication)
+
                         .build();
                 return chain.proceed(newRequest);
             }
