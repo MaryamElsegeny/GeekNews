@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 try {
                     Thread.sleep( 1800 );
-                    SharedPreferences Loginprefs =  getSharedPreferences("saveUserLogin", 0);
+                    SharedPreferences Loginprefs =  getSharedPreferences("GeekNews", 0);
                     boolean userLoginStatus = Loginprefs.getBoolean("saveUserLogin", false);
 
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);

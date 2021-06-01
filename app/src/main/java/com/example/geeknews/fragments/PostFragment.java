@@ -106,7 +106,7 @@ public class PostFragment extends Fragment {
     }
 
     private void getCategoryNameFromSideMenu() {
-        sharedPreferences = requireContext().getSharedPreferences("category name in navDrawer", MODE_PRIVATE);
+        sharedPreferences = requireContext().getSharedPreferences("GeekNews", MODE_PRIVATE);
         categoryNameSideMenu = sharedPreferences.getString("name", "");
         scirnceTopicSideMenu = sharedPreferences.getString("topic", "");
 
@@ -129,14 +129,14 @@ public class PostFragment extends Fragment {
 
     private void getCategoryNameFromCategoriesFragment() {
 
-        sharedPreferences = requireContext().getSharedPreferences("category name", MODE_PRIVATE);
+        sharedPreferences = requireContext().getSharedPreferences("GeekNews", MODE_PRIVATE);
         categoryName = sharedPreferences.getString("name", "");
         scirnceTopic = sharedPreferences.getString("topic", "");
 
     }
 
     private void gettId() {
-        sharedPreferences = requireContext().getSharedPreferences("post id", MODE_PRIVATE);
+        sharedPreferences = requireContext().getSharedPreferences("GeekNews", MODE_PRIVATE);
         id = sharedPreferences.getInt("id", 0);
     }
 

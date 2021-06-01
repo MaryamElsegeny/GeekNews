@@ -161,9 +161,10 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_postFragment);
                 PostModel postModel = postModelArrayList.get(position);
 
-                sharedPreferences = requireActivity().getSharedPreferences("post id", Context.MODE_PRIVATE);
+                sharedPreferences = requireActivity().getSharedPreferences("GeekNews", Context.MODE_PRIVATE);
                 editor = sharedPreferences.edit();
                 editor.putInt("id", postModel.getId());
+                Log.d(TAG, "onClick: "+postModel.getId());
                 editor.apply();
             }
 
@@ -211,6 +212,9 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     postAdapter.notifyDataSetChanged();
                     isLoading = false;
                     progressBar.setVisibility(View.INVISIBLE);
+                    if (response.body().getCount() == 0) {
+                        Toast.makeText(requireContext(), "Sorry, we could not find any matches for your search.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else if (response.code()==404){
                     progressBar.setVisibility(View.INVISIBLE);
@@ -258,13 +262,13 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
 
     private void getCategoryNameFromCategoriesFragment() {
 
-        sharedPreferences = requireContext().getSharedPreferences("category name", MODE_PRIVATE);
+        sharedPreferences = requireContext().getSharedPreferences("GeekNews", MODE_PRIVATE);
         categoryName = sharedPreferences.getString("name", "");
         scirnceTopic = sharedPreferences.getString("topic", "");
     }
 
     private void getCategoryNameFromSideMenu() {
-        sharedPreferences = requireContext().getSharedPreferences("category name in navDrawer", MODE_PRIVATE);
+        sharedPreferences = requireContext().getSharedPreferences("GeekNews", MODE_PRIVATE);
         categoryNameSideMenu = sharedPreferences.getString("name", "");
         scirnceTopicSideMenu = sharedPreferences.getString("topic", "");
     }
@@ -360,8 +364,10 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
 //                    postModelArrayList.clear();
                     postModelArrayList.addAll(response.body().getPostModelList());
                     isLoading = false;
-
                     postAdapter.notifyDataSetChanged();
+                    if (response.body().getCount() == 0) {
+                        Toast.makeText(requireContext(), "Sorry, we could not find any matches for your search.", Toast.LENGTH_SHORT).show();
+                    }
                 }   else if (response.code()==404){
                     progressBar.setVisibility(View.INVISIBLE);
                     Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();

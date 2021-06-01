@@ -89,10 +89,10 @@
                     android:id="@+id/name_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="maryam adel abdelftah elsegeny"
                     android:textSize="25sp"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/blue"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:maxWidth="240dp"
@@ -101,9 +101,22 @@
                     app:layout_constraintWidth_percent="0.31"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="18dp"
-                    android:layout_marginStart="@dimen/_16sdp"
                     android:textStyle="bold"
 
+                    />
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:indeterminateTint="@color/gray"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="18dp"
                     />
 
                 <View

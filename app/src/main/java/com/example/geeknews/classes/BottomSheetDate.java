@@ -109,7 +109,7 @@ public class BottomSheetDate extends BottomSheetDialogFragment {
 
     }
     private void checkClickRv(){
-        sharedPreferences = requireActivity().getSharedPreferences("type or date", Context.MODE_PRIVATE);
+        sharedPreferences = requireActivity().getSharedPreferences("GeekNews", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         if (clickRv()){
             editor.putString("startDate",startDate);
@@ -131,11 +131,6 @@ public class BottomSheetDate extends BottomSheetDialogFragment {
                 RadioButtonModel radioButtonModel = radioButtonModelArrayList.get(position);
                 startDate = radioButtonModel.getRadBtnDateStart();
                 endDate=radioButtonModel.getRadBtnDateEnd();
-
-
-
-
-
 
                 sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
                 sharedViewModel.selectDateAndType(radioButtonModel);

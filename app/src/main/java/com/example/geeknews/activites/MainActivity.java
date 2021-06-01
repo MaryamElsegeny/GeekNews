@@ -24,6 +24,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,16 +57,23 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
     private NavGraph navGraph;
     private String message ;
     private TextView logoutTv ;
-    private TextView nameTv ;
+    public TextView nameTv ;
     private ApiInterface apiInterface;
     private String token ;
+    private ProgressBar progressBar ;
+    private String categoryNotfy;
+    private String isNotfy;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         findId();
+        progressBar.setVisibility(View.VISIBLE);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         setUpRecyclerView();
@@ -74,38 +82,48 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
          navGraph = navController.getNavInflater().inflate(R.navigation.home_nav);
         checkStartDistenation();
         clickLogout();
-        getUserName();
-
+        getTokenShared();
+        SharedPreferences Loginprefs = getSharedPreferences("GeekNews", 0);
+        boolean userLoginStatus = Loginprefs.getBoolean("saveUserLogin", false);
+        if (userLoginStatus) {
+            getUserName(token);
+        }
     }
-    private void findId(){
+    public void findId(){
         toolbar =  findViewById(R.id.toolbar_actionbar);
         drawerLayout = findViewById(R.id.drawer_layout);
         logoutTv= findViewById(R.id.logout);
         nameTv=findViewById(R.id.name_tv);
+        progressBar = findViewById(R.id.progressBar);
+
     }
 
-    public void getUserName() {
-        getTokenShared();
+    public void getUserName(String token) {
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
         Call<Model> getDetails = apiInterface.getUserName("Bearer "+token);
         getDetails.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
+                progressBar.setVisibility(View.INVISIBLE);
                 if (response.code() == 200) {
                     nameTv.setText(response.body().getUser());
+                }
+                else {
+                    Toast.makeText(MainActivity.this, ""+response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
 
             @Override
             public void onFailure(Call<Model> call, Throwable t) {
+                progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(MainActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
             }
         });
     }
     private void getTokenShared() {
 
-        sharedPreferences = getSharedPreferences("token", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("GeekNews", MODE_PRIVATE);
         token = sharedPreferences.getString("token","");
     }
 
@@ -161,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
 
                 model = modelArrayList.get(position);
 
-                sharedPreferences = getSharedPreferences("category name in navDrawer", Context.MODE_PRIVATE);
+                sharedPreferences = getSharedPreferences("GeekNews", Context.MODE_PRIVATE);
                 editor = sharedPreferences.edit();
                 editor.putString("name",model.getNameCategory());
                 editor.putString("topic",model.getCategory());
@@ -197,6 +215,8 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
     private void getStartScreen(){
         Intent intent = getIntent();
         message = intent.getStringExtra("save user");
+        categoryNotfy = intent.getStringExtra("notification");
+        isNotfy = intent.getStringExtra("notfy");
     }
     private void checkStartDistenation() {
         getStartScreen();
@@ -207,10 +227,13 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
             navGraph.setStartDestination(R.id.loginFragment);
             navController.setGraph(navGraph);
         }
-        else if (message.equals("notification")) {
-            navGraph.setStartDestination(R.id.postFragment);
-            navController.setGraph(navGraph);
-        }
+//        else if (isNotfy.equals("toHome")) {
+//            Bundle bundle = new Bundle();
+//            bundle.putString("categoryNotfy", categoryNotfy);
+//            navGraph.setStartDestination(R.id.homeFragment);
+//            navController.setGraph(navGraph,bundle);
+//
+//        }
     }
     private void clickLogout(){
         logoutTv.setOnClickListener(new View.OnClickListener() {
@@ -224,10 +247,9 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
     public void clickDialogLogout(){
                 navGraph.setStartDestination(R.id.loginFragment);
                 navController.setGraph(navGraph);
-                SharedPreferences  prefs = getSharedPreferences("saveUserLogin", 0);
+                SharedPreferences  prefs = getSharedPreferences("GeekNews", 0);
                 SharedPreferences.Editor edit = prefs.edit();
                 edit.clear();
                 edit.commit();
-
             }
 }

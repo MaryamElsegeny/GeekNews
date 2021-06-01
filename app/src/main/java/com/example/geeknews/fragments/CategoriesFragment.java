@@ -126,7 +126,7 @@ public class CategoriesFragment extends Fragment {
             public void onResponse(Call<NotficationModel> call, Response<NotficationModel> response) {
              if (response.code()==201) {
                  isTokenSend = "true";
-                 sharedPreferences = requireContext().getSharedPreferences("token1", 0);
+                 sharedPreferences = requireContext().getSharedPreferences("GeekNews", 0);
                  editor = sharedPreferences.edit();
                  editor.putString("token1", isTokenSend);
                  editor.commit();
@@ -142,12 +142,12 @@ public class CategoriesFragment extends Fragment {
 
     }
     private void getToken(){
-        sharedPreferences =  requireContext().getSharedPreferences("token1", 0);
+        sharedPreferences =  requireContext().getSharedPreferences("GeekNews", 0);
         isTokenSend = sharedPreferences.getString("token1", "false");
     }
     private void getTokenShared() {
 
-        sharedPreferences = requireActivity().getSharedPreferences("token", MODE_PRIVATE);
+        sharedPreferences = requireActivity().getSharedPreferences("GeekNews", MODE_PRIVATE);
         token = sharedPreferences.getString("token","");
     }
     private void clickCategories(){
@@ -178,7 +178,6 @@ public class CategoriesFragment extends Fragment {
                 nameCategory="Programming Languages Compilers Interpreters";
                 scienceTopic="Programming Language";
                 collectData();
-
             }
         }); databaseManagement.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,7 +261,7 @@ public class CategoriesFragment extends Fragment {
 
 
     private void saveCategory(){
-        sharedPreferences = requireActivity().getSharedPreferences("category name", Context.MODE_PRIVATE);
+        sharedPreferences = requireActivity().getSharedPreferences("GeekNews", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString("name",nameCategory);
         editor.putString("topic",scienceTopic);

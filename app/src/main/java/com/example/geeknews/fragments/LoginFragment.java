@@ -1,5 +1,6 @@
 package com.example.geeknews.fragments;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,12 +18,14 @@ import retrofit2.Response;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.geeknews.R;
+import com.example.geeknews.activites.MainActivity;
 import com.example.geeknews.interfaces.DrawerLocker;
 import com.example.geeknews.models.User;
 import com.example.geeknews.retrofit.ApiInterface;
@@ -48,7 +51,7 @@ public class LoginFragment extends Fragment {
     private View view ;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-
+private InputMethodManager imm ;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +83,10 @@ public class LoginFragment extends Fragment {
        clickSignUpTV();
 //       clickForgetPassTV();
         ((DrawerLocker) getActivity()).setDrawerEnabled(false);
+         imm = (InputMethodManager) requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+         view = requireActivity().getCurrentFocus();
+
+
 
     }
 
@@ -117,21 +124,27 @@ public class LoginFragment extends Fragment {
 
                     if (isAdded()) {
 
+                        if (view == null) {
+                            view = new View(requireContext());
+                        }
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_categoriesFragment);
+
                     }
                     //save user login
                     Boolean saveUserLogin = true;
-                    sharedPreferences = requireActivity().getSharedPreferences("saveUserLogin", 0);
+                    sharedPreferences = requireActivity().getSharedPreferences("GeekNews", 0);
                     editor = sharedPreferences.edit();
                     editor.putBoolean("saveUserLogin", saveUserLogin);
                     editor.commit();
 
                     //save token
                     String token = response.body().getAccessToken();
-                    sharedPreferences = requireActivity().getSharedPreferences("token", 0);
+                    sharedPreferences = requireActivity().getSharedPreferences("GeekNews", 0);
                     editor = sharedPreferences.edit();
                     editor.putString("token", token);
                     editor.commit();
+                    ((MainActivity)getActivity()).getUserName(token);
                 }
                 else if (response.code() == 401) {
 
