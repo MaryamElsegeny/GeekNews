@@ -37,6 +37,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.ArrayList;
+
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
@@ -116,15 +118,13 @@ getTokenShared();
     }
     private void postLogin(Task<String> task) {
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
-        NotficationModel notficationModel = new NotficationModel(task.getResult() , "android");
-        Call<NotficationModel> insertToken = apiInterface.insertToken(notficationModel  );
+
+        NotficationModel notficationModel = new NotficationModel(task.getResult(), "android");
+        Call<NotficationModel> insertToken = apiInterface.insertToken(notficationModel , "Bearer "+token);
         insertToken.enqueue(new Callback<NotficationModel>() {
             @Override
             public void onResponse(Call<NotficationModel> call, Response<NotficationModel> response) {
-
-             Toast.makeText(requireContext(), ""+response.code(), Toast.LENGTH_SHORT).show();
-
-             if (response.code()==200) {
+             if (response.code()==201) {
                  isTokenSend = "true";
                  sharedPreferences = requireContext().getSharedPreferences("token1", 0);
                  editor = sharedPreferences.edit();

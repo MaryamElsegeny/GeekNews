@@ -40,6 +40,6 @@ public interface ApiInterface {
     Call<User> postRegister(@Body User user);
 
     @POST("devices")
-    Call<NotficationModel> insertToken(@Body NotficationModel notficationModel );
+    Call<NotficationModel> insertToken(@Body NotficationModel notficationModel , @Header("Authorization") String token);
 
 }
