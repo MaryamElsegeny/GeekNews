@@ -103,18 +103,18 @@ public class CategoriesFragment extends Fragment {
             onBackPressed();
             clickCategories();
             saveCategory();
-getTokenShared();
-        getToken();
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                Log.d(TAG, "onComplete: "+ task.getResult());
-                if (isTokenSend=="false"){
-                    postLogin(task);
+            getTokenShared();
+            getToken();
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    Log.d(TAG, "onComplete: "+ task.getResult());
+                    if (isTokenSend=="false"){
+                        postLogin(task);
+                    }
                 }
-            }
 
-        });
+            });
     }
     private void postLogin(Task<String> task) {
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);

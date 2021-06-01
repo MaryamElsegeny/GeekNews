@@ -4,6 +4,7 @@ public class Model {
 
    private String category ;
     private String NameCategory ;
+    private String user ;
 
 
     public Model(String category, String nameCategory) {
@@ -25,6 +26,14 @@ public class Model {
 
     public void setNameCategory(String nameCategory) {
         NameCategory = nameCategory;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.geeknews.retrofit;
 
 
+import com.example.geeknews.models.Model;
 import com.example.geeknews.models.NotficationModel;
 import com.example.geeknews.models.PostDetails;
 import com.example.geeknews.models.ResultsModel;
@@ -41,5 +42,8 @@ public interface ApiInterface {
 
     @POST("devices")
     Call<NotficationModel> insertToken(@Body NotficationModel notficationModel , @Header("Authorization") String token);
+
+    @GET("auth/Details")
+    Call<Model> getUserName(@Header("Authorization") String token);
 
 }

@@ -11,6 +11,9 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -22,6 +25,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.geeknews.R;
 import com.example.geeknews.adapters.CategoriesAdapter;
@@ -31,6 +35,9 @@ import com.example.geeknews.classes.BottomSheetType;
 import com.example.geeknews.classes.RecyclerTouchListener;
 import com.example.geeknews.interfaces.DrawerLocker;
 import com.example.geeknews.models.Model;
+import com.example.geeknews.models.PostDetails;
+import com.example.geeknews.retrofit.ApiInterface;
+import com.example.geeknews.retrofit.RetrofitFactory;
 
 import java.util.ArrayList;
 
@@ -49,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
     private NavGraph navGraph;
     private String message ;
     private TextView logoutTv ;
+    private TextView nameTv ;
+    private ApiInterface apiInterface;
+    private String token ;
 
 
     @Override
@@ -64,14 +74,40 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
          navGraph = navController.getNavInflater().inflate(R.navigation.home_nav);
         checkStartDistenation();
         clickLogout();
+        getUserName();
 
     }
     private void findId(){
         toolbar =  findViewById(R.id.toolbar_actionbar);
         drawerLayout = findViewById(R.id.drawer_layout);
         logoutTv= findViewById(R.id.logout);
+        nameTv=findViewById(R.id.name_tv);
     }
 
+    public void getUserName() {
+        getTokenShared();
+        apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
+        Call<Model> getDetails = apiInterface.getUserName("Bearer "+token);
+        getDetails.enqueue(new Callback<Model>() {
+            @Override
+            public void onResponse(Call<Model> call, Response<Model> response) {
+                if (response.code() == 200) {
+                    nameTv.setText(response.body().getUser());
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<Model> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void getTokenShared() {
+
+        sharedPreferences = getSharedPreferences("token", MODE_PRIVATE);
+        token = sharedPreferences.getString("token","");
+    }
 
     private void setUpRecyclerView() {
         rv = findViewById(R.id.category_rv);
@@ -169,6 +205,10 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
             navController.setGraph(navGraph);
         } else if (message.equals("user not login")) {
             navGraph.setStartDestination(R.id.loginFragment);
+            navController.setGraph(navGraph);
+        }
+        else if (message.equals("notification")) {
+            navGraph.setStartDestination(R.id.postFragment);
             navController.setGraph(navGraph);
         }
     }
