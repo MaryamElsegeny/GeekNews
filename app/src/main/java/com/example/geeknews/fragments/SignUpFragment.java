@@ -1,12 +1,14 @@
 package com.example.geeknews.fragments;
 
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import retrofit2.Call;
@@ -45,8 +47,8 @@ public class SignUpFragment extends Fragment {
         private Button signUpBtn ;
         private TextInputEditText userNameEditText ;
         private TextInputEditText passEditText ;
-    private TextInputEditText passConfEditText ;
-    private TextInputEditText firstNameEditText ;
+        private TextInputEditText passConfEditText ;
+        private TextInputEditText firstNameEditText ;
         private TextInputEditText lastNameEditText ;
         private TextInputEditText emailEditText ;
         private String username;
@@ -63,10 +65,11 @@ public class SignUpFragment extends Fragment {
         private JSONArray emailError;
         private JSONArray passwordError ;
         private String passwordConfError ;
-        JSONObject jObjError;
-        String userError ;
-        String passsError ;
-        String emaillError ;
+        private JSONObject jObjError;
+        private   String userError ;
+        private String passsError ;
+        private   String emaillError ;
+        private ArrayList<String> categoriess = new ArrayList<String>() ;
 
 
     @Override
@@ -155,10 +158,8 @@ public class SignUpFragment extends Fragment {
     private void postRegister() {
         getDataFromEd();
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
-       ArrayList<String> categories = new ArrayList<String>() ;
-       categories.add("AI");
 
-        User user = new User(username, password , passwordConf , firstName , lastName , email , categories);
+        User user = new User(username, password , passwordConf , firstName , lastName , email , categoriess);
         Call<User> postLogin = apiInterface.postRegister(user);
         postLogin.enqueue(new Callback<User>() {
             @Override
@@ -261,13 +262,14 @@ public class SignUpFragment extends Fragment {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                signUpBtn.getBackground().setAlpha(100);
-                progressBar.setVisibility(View.VISIBLE);
-
                 if (isValid()) {
-//                    Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_categoriesFragment);
+                    if (!categoriess.isEmpty()){
+                        progressBar.setVisibility(View.VISIBLE);
+                        postRegister();
 
-                    postRegister();
+                    }else {
+                    alertDialog();}
+
                 }
                 else {
                     Toast.makeText(requireContext(), "please enter all fields ", Toast.LENGTH_SHORT).show();
@@ -275,10 +277,65 @@ public class SignUpFragment extends Fragment {
 
                 }
 
+
             }
         });
     }
 
+    private void alertDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("You interested more ?");
+
+// Add a checkbox list
+        String[] categories = {"Software Engineering", "Programming Language", "Database Management", "Artificial Intelligence", "Algorithm" , "Data Mining" , "Information Systems" , "Retrieve Information"};
+        boolean[] checkedItems = {false, false, false, false, false , false , false , false};
+        builder.setMultiChoiceItems(categories, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                // The user checked or unchecked a box
+            }
+        });
+
+// Add OK and Cancel buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (checkedItems[0]){
+                    categoriess.add("Software Engineering");
+                }
+                if (checkedItems[1]){
+                    categoriess.add("Programming Languages Compilers Interpreters");
+                }
+                if (checkedItems[2]){
+                    categoriess.add("Database Management");
+                }
+                if (checkedItems[3]){
+                    categoriess.add("AI");
+                }
+                if (checkedItems[4]){
+                    categoriess.add("Algorithm Analysis and Problem Complexity");
+                }
+                if (checkedItems[5]){
+                    categoriess.add("Data Mining and Knowledge Discovery");
+                }
+                if (checkedItems[6]){
+                    categoriess.add("Management of Computing and Information Systems");
+                }
+                if (checkedItems[7]){
+                    categoriess.add("Information Storage and Retrieval");
+                }
+
+
+
+                // The user clicked OK
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+
+// Create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
     public void onBackPressed() {
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override

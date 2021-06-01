@@ -1,6 +1,7 @@
 package com.example.geeknews.retrofit;
 
 
+import com.example.geeknews.models.NotficationModel;
 import com.example.geeknews.models.PostDetails;
 import com.example.geeknews.models.ResultsModel;
 import com.example.geeknews.models.User;
@@ -8,7 +9,10 @@ import com.example.geeknews.models.User;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -35,5 +39,7 @@ public interface ApiInterface {
     @POST("auth/register")
     Call<User> postRegister(@Body User user);
 
+    @POST("devices")
+    Call<NotficationModel> insertToken(@Body NotficationModel notficationModel );
 
 }

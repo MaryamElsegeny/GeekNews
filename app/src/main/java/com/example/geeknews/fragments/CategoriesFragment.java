@@ -15,7 +15,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +30,15 @@ import android.widget.Toast;
 import com.example.geeknews.R;
 import com.example.geeknews.classes.BottomSheetType;
 import com.example.geeknews.classes.SharedViewModel;
+import com.example.geeknews.models.NotficationModel;
+import com.example.geeknews.retrofit.ApiInterface;
+import com.example.geeknews.retrofit.RetrofitFactory;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class CategoriesFragment extends Fragment {
@@ -48,6 +61,11 @@ public class CategoriesFragment extends Fragment {
     private NavController navController ;
     private NavGraph navGraph;
     private SharedViewModel sharedViewModel;
+
+    private ApiInterface apiInterface;
+    private String  isTokenSend = "false" ;
+    private String token ;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,9 +101,55 @@ public class CategoriesFragment extends Fragment {
             onBackPressed();
             clickCategories();
             saveCategory();
+getTokenShared();
+        getToken();
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                Log.d(TAG, "onComplete: "+ task.getResult());
+                if (isTokenSend=="false"){
+                    postLogin(task);
+                }
+            }
+
+        });
+    }
+    private void postLogin(Task<String> task) {
+        apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
+        NotficationModel notficationModel = new NotficationModel(task.getResult() , "android");
+        Call<NotficationModel> insertToken = apiInterface.insertToken(notficationModel  );
+        insertToken.enqueue(new Callback<NotficationModel>() {
+            @Override
+            public void onResponse(Call<NotficationModel> call, Response<NotficationModel> response) {
+
+             Toast.makeText(requireContext(), ""+response.code(), Toast.LENGTH_SHORT).show();
+
+             if (response.code()==200) {
+                 isTokenSend = "true";
+                 sharedPreferences = requireContext().getSharedPreferences("token1", 0);
+                 editor = sharedPreferences.edit();
+                 editor.putString("token1", isTokenSend);
+                 editor.commit();
+             }
+            }
+
+            @Override
+            public void onFailure(Call<NotficationModel> call, Throwable t) {
+                Toast.makeText(requireContext(), ""+t, Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
     }
+    private void getToken(){
+        sharedPreferences =  requireContext().getSharedPreferences("token1", 0);
+        isTokenSend = sharedPreferences.getString("token1", "false");
+    }
+    private void getTokenShared() {
 
+        sharedPreferences = requireActivity().getSharedPreferences("token", MODE_PRIVATE);
+        token = sharedPreferences.getString("token","");
+    }
     private void clickCategories(){
         allBranches.setOnClickListener(new View.OnClickListener() {
             @Override

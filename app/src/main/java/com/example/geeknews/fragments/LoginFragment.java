@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.geeknews.R;
+import com.example.geeknews.classes.MyApplication;
 import com.example.geeknews.interfaces.DrawerLocker;
 import com.example.geeknews.models.User;
 import com.example.geeknews.retrofit.ApiInterface;
@@ -128,6 +129,7 @@ public class LoginFragment extends Fragment {
 
                     //save token
                     String token = response.body().getAccessToken();
+                    MyApplication.tokenApplication = token ;
                     sharedPreferences = requireActivity().getSharedPreferences("token", 0);
                     editor = sharedPreferences.edit();
                     editor.putString("token", token);
