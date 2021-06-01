@@ -121,6 +121,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
         ((DrawerLocker) getActivity()).setDrawerEnabled(true);
         progressBar.setVisibility(View.VISIBLE);
         getCategoryNameFromCategoriesFragment();
+        getCategoryNameFromSideMenu();
         caseGetPost();
         onBackPressed();
         clickFilterIv();

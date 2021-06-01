@@ -146,8 +146,8 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
     }
 
     private void addDataToList() {
-        Model orderModel1= new Model("Software Engineering" , "SoftwareEngineering");
-        Model orderModel2 = new Model("Programming Languages" , "Programming Languages, Compilers, Interpreters");
+        Model orderModel1= new Model("Software Engineering" , "Software Engineering");
+        Model orderModel2 = new Model("Programming Languages" , "Programming Languages Compilers Interpreters");
         Model orderModel3 = new Model("Database Management" , "Database Management");
         Model orderModel4 = new Model("Artificial Intelligence" , "AI");
         Model orderModel5 = new Model("Algorithm" , "Algorithm Analysis and Problem Complexity");
@@ -227,13 +227,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
             navGraph.setStartDestination(R.id.loginFragment);
             navController.setGraph(navGraph);
         }
-//        else if (isNotfy.equals("toHome")) {
-//            Bundle bundle = new Bundle();
-//            bundle.putString("categoryNotfy", categoryNotfy);
-//            navGraph.setStartDestination(R.id.homeFragment);
-//            navController.setGraph(navGraph,bundle);
-//
-//        }
+//       +
     }
     private void clickLogout(){
         logoutTv.setOnClickListener(new View.OnClickListener() {

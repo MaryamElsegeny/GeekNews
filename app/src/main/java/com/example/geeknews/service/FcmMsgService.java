@@ -59,6 +59,7 @@ public class FcmMsgService extends FirebaseMessagingService {
         builder.setAutoCancel(true);
         builder.setContentIntent(pendingIntent);
         NotificationManager notificationManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+
         notificationManager.notify(0,builder.build());
         super.onMessageReceived(remoteMessage);
     }
