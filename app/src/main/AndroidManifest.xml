@@ -21,9 +21,6 @@
         android:usesCleartextTraffic="true"
 
         >
-
-
-
     <activity android:name=".activites.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

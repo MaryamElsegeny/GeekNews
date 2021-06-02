@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.geeknews.R;
-import com.example.geeknews.classes.BottomSheetType;
 import com.example.geeknews.classes.SharedViewModel;
 import com.example.geeknews.models.NotficationModel;
 import com.example.geeknews.retrofit.ApiInterface;
@@ -36,8 +35,6 @@ import com.example.geeknews.retrofit.RetrofitFactory;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
-
-import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
@@ -110,13 +107,13 @@ public class CategoriesFragment extends Fragment {
                 public void onComplete(@NonNull Task<String> task) {
                     Log.d(TAG, "onComplete: "+ task.getResult());
                     if (isTokenSend=="false"){
-                        postLogin(task);
+                        postToken(task);
                     }
                 }
 
             });
     }
-    private void postLogin(Task<String> task) {
+    private void postToken(Task<String> task) {
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
 
         NotficationModel notficationModel = new NotficationModel(task.getResult(), "android");
@@ -135,7 +132,6 @@ public class CategoriesFragment extends Fragment {
 
             @Override
             public void onFailure(Call<NotficationModel> call, Throwable t) {
-                Toast.makeText(requireContext(), ""+t, Toast.LENGTH_SHORT).show();
 
             }
         });

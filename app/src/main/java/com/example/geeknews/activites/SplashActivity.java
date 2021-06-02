@@ -31,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
 
                     if(userLoginStatus == (true)) {
-                        intent.putExtra("save user", "user login");
+                        intent.putExtra("save userr", "user login");
                         startActivity(intent);
                     }
                     else {

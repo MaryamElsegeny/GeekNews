@@ -243,8 +243,9 @@
                         android:text="@string/sign_up_with_line"
                         android:textSize="@dimen/_10ssp"
                         android:layout_marginStart="@dimen/_7sdp"
-
-                        android:layout_marginLeft="@dimen/_7sdp" />
+                        android:layout_marginLeft="@dimen/_7sdp"
+                        android:textColor="@color/gray2"
+                        />
 
                 </LinearLayout>
                 <ProgressBar

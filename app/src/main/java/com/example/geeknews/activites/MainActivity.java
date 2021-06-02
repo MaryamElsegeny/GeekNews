@@ -214,9 +214,9 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
     }
     private void getStartScreen(){
         Intent intent = getIntent();
-        message = intent.getStringExtra("save user");
-        categoryNotfy = intent.getStringExtra("notification");
-        isNotfy = intent.getStringExtra("notfy");
+        message = intent.getStringExtra("save userr");
+        categoryNotfy = intent.getStringExtra("notification category");
+        isNotfy = intent.getStringExtra("navigate notification");
     }
     private void checkStartDistenation() {
         getStartScreen();
@@ -227,7 +227,13 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
             navGraph.setStartDestination(R.id.loginFragment);
             navController.setGraph(navGraph);
         }
-//       +
+        else if (isNotfy.equals("toHome")) {
+            Bundle bundle = new Bundle();
+            bundle.putString("categoryNotfy", categoryNotfy);
+            navGraph.setStartDestination(R.id.homeFragment);
+            navController.setGraph(navGraph,bundle);
+
+        }
     }
     private void clickLogout(){
         logoutTv.setOnClickListener(new View.OnClickListener() {
