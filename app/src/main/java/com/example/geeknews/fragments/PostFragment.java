@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,13 +48,12 @@ public class PostFragment extends Fragment {
     private TextView postDateTV;
     private TextView abstractTv;
     private ProgressBar progressBar;
-    private String scirnceTopic;
-    private String scirnceTopicSideMenu;
+
     private NavController navController;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private String categoryName;
-    private String categoryNameSideMenu;
+    private String categoryNameDesign;
     private int id;
     private ApiInterface apiInterface;
     private String mainArticle;
@@ -62,6 +62,8 @@ public class PostFragment extends Fragment {
     private Button downloadBtn;
     private WebView webView;
     private static final int PERMISSION_STORAGE_CODE = 1000;
+    private NavGraph navGraph;
+    private String checkReturn ;
 
 
     @Override
@@ -78,6 +80,7 @@ public class PostFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_post, container, false);
         scienceTopicTV = view.findViewById(R.id.topicTV);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+        navGraph = navController.getNavInflater().inflate(R.navigation.home_nav);
         postTypeTv = view.findViewById(R.id.postTypeTV);
         postDateTV = view.findViewById(R.id.postDateTV);
         titleTV = view.findViewById(R.id.titleTV);
@@ -98,60 +101,15 @@ public class PostFragment extends Fragment {
         ((DrawerLocker) getActivity()).setDrawerEnabled(true);
         mainArticleBtn.setEnabled(false);
         downloadBtn.setEnabled(false);
+        if (navController.getGraph().getStartDestination()==R.id.postFragment) {
+            {
+                Navigation.findNavController(view).navigate(R.id.action_postFragment_to_homeFragment );
 
-        setScienceTopicText();
+            }}
         onBackPressed();
         getDetails();
         clickButtons();
     }
-
-    private void getCategoryNameFromSideMenu() {
-        sharedPreferences = requireContext().getSharedPreferences("GeekNews", MODE_PRIVATE);
-        categoryNameSideMenu = sharedPreferences.getString("name", "");
-        scirnceTopicSideMenu = sharedPreferences.getString("topic", "");
-
-    }
-
-    private void setScienceTopicText() {
-
-        if (navController.getGraph().getStartDestination() == R.id.homeFragment) {
-            getCategoryNameFromSideMenu();
-
-            scienceTopicTV.setText(scirnceTopicSideMenu);
-
-        } else {
-            getCategoryNameFromCategoriesFragment();
-
-            scienceTopicTV.setText(scirnceTopic);
-
-        }
-    }
-
-    private void getCategoryNameFromCategoriesFragment() {
-
-        sharedPreferences = requireContext().getSharedPreferences("GeekNews", MODE_PRIVATE);
-        categoryName = sharedPreferences.getString("name", "");
-        scirnceTopic = sharedPreferences.getString("topic", "");
-
-    }
-
-    private void gettId() {
-        sharedPreferences = requireContext().getSharedPreferences("GeekNews", MODE_PRIVATE);
-        id = sharedPreferences.getInt("id", 0);
-    }
-
-    public void onBackPressed() {
-        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
-            @Override
-            public void handleOnBackPressed() {
-                Navigation.findNavController(view).popBackStack();
-
-            }
-        };
-        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), callback);
-
-    }
-
     public void getDetails() {
         gettId();
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
@@ -168,7 +126,36 @@ public class PostFragment extends Fragment {
                     abstractTv.setText(response.body().getTextAbstract());
                     mainArticle = response.body().getPageUrl();
                     downloadArticle = response.body().getPdfUrl();
-
+                    categoryName = response.body().getCategory();
+                    if (categoryName!= null &&categoryName.equals("AI") ){
+                        categoryNameDesign="Artificial Intelligence";
+                    } else
+                    if (categoryName!= null &&categoryName .equals("Software Engineering") ){
+                        categoryNameDesign="Software Engineering";
+                    } else
+                    if (categoryName!= null &&categoryName .equals("Programming Languages Compilers Interpreters") ){
+                        categoryNameDesign="Programming Languages";
+                    }else
+                    if (categoryName!= null &&categoryName.equals("Database Management")){
+                        categoryNameDesign="Database Management";
+                    }else
+                    if (categoryName!= null &&categoryName.equals("Algorithm Analysis and Problem Complexity")){
+                        categoryNameDesign="Algorithm";
+                    }
+                    else if (categoryName!= null &&categoryName.equals("Data Mining and Knowledge Discovery"))
+                    {
+                        categoryNameDesign="Data Mining";
+                    }else  if (categoryName!= null &&categoryName.equals("Management of Computing and Information Systems"))
+                    {
+                        categoryNameDesign="Information Systems";
+                    }
+                    else if (categoryName!= null &&categoryName.equals("Information Storage and Retrieval")){
+                        categoryNameDesign="Retrieve Information";
+                    }
+                    else if (categoryName!= null &&categoryName.equals("")){
+                        categoryNameDesign="All branches";
+                    }
+                    scienceTopicTV.setText(categoryNameDesign);
                     mainArticleBtn.setEnabled(true);
                     downloadBtn.setEnabled(true);
 
@@ -176,7 +163,7 @@ public class PostFragment extends Fragment {
 
                     progressBar.setVisibility(View.INVISIBLE);
 
-                    Toast.makeText(requireContext(), "" + response.code(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireContext(), "" + response.code(), Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -189,6 +176,41 @@ public class PostFragment extends Fragment {
             }
         });
     }
+
+
+    private void gettId() {
+        sharedPreferences = requireContext().getSharedPreferences("GeekNews", MODE_PRIVATE);
+        id = sharedPreferences.getInt("id", 0);
+    }
+
+    public void onBackPressed() {
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                checkReturn= getArguments().getString("checkReturn");
+                if (checkReturn=="1"){
+                    Bundle bundle = new Bundle();
+                    bundle.putString("pass3","pass3");
+                    Navigation.findNavController(view).navigate(R.id.action_postFragment_to_homeFragment ,bundle);
+                }
+                if (checkReturn == "2"){
+                    navGraph.setStartDestination(R.id.homeFragment);
+                    navController.setGraph(navGraph);
+                }
+                if (checkReturn=="3"){
+                    navGraph.setStartDestination(R.id.postFragment);
+                    navController.setGraph(navGraph);
+                    Navigation.findNavController(view).navigate(R.id.action_postFragment_to_homeFragment );
+                }
+
+
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), callback);
+
+    }
+
+
 
     private void clickButtons() {
 

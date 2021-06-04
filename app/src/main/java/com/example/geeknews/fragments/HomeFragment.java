@@ -35,6 +35,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,15 +57,21 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
     private ApiInterface apiInterface;
     private String categoryName;
     private String categoryNameSideMenu;
+    private String categoryNameNotification ;
 
     private String scirnceTopic;
     private String scirnceTopicSideMenu;
+    private String scirnceTopicNotification;
+
+    private String pass1 ;
+    private String pass2 ;
+    private String pass3 ;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private TextView scienceTopicTV;
     private ProgressBar progressBar;
-
+    private NavGraph navGraph;
     private NavController navController;
     private SearchView searchView;
     private String startDate;
@@ -92,6 +99,12 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
     private int currentPage = PAGE_START;
 
      String requestType = "";
+    boolean checkReturn1 ;
+    boolean checkReturn2 ;
+    boolean checkReturn3 ;
+    private String checkReturn ;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +122,8 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
         scienceTopicTV = view.findViewById(R.id.topicTV);
         progressBar = view.findViewById(R.id.progressBar);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+        navGraph = navController.getNavInflater().inflate(R.navigation.home_nav);
+
         searchView = view.findViewById(R.id.search_view);
         return view;
     }
@@ -121,7 +136,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
         ((DrawerLocker) getActivity()).setDrawerEnabled(true);
         progressBar.setVisibility(View.VISIBLE);
         getCategoryNameFromCategoriesFragment();
-        getCategoryNameFromSideMenu();
         caseGetPost();
         onBackPressed();
         clickFilterIv();
@@ -138,7 +152,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             @Override
             public void onClick(View v) {
                 filterIV.getBackground().setAlpha(45);
-
                 BottomSheetFilter bottomSheet = new BottomSheetFilter();
                 bottomSheet.show(requireActivity().getSupportFragmentManager(), "exampleBottomSheet");
             }
@@ -159,9 +172,25 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             @Override
             public void onClick(View view, int position) {
 
-                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_postFragment);
-                PostModel postModel = postModelArrayList.get(position);
+                if (checkReturn1){
+                    checkReturn = "1";
+                }
+                if (checkReturn2){
+                    checkReturn="2";
+                }
+                if (checkReturn3){
+                    checkReturn="3";
+                }
 
+                Bundle bundle = new Bundle() ;
+                bundle.putString("checkReturn" , checkReturn);
+
+
+                navGraph.setStartDestination(R.id.homeFragment);
+                navController.setGraph(navGraph);
+                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_postFragment , bundle);
+
+                PostModel postModel = postModelArrayList.get(position);
                 sharedPreferences = requireActivity().getSharedPreferences("GeekNews", Context.MODE_PRIVATE);
                 editor = sharedPreferences.edit();
                 editor.putInt("id", postModel.getId());
@@ -178,13 +207,23 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
 
     private void setScienceTopicText() {
         getCategoryNameFromSideMenu();
-
-        if (navController.getGraph().getStartDestination() == R.id.homeFragment) {
-            scienceTopicTV.setText(scirnceTopicSideMenu);
-        } else {
-
-            scienceTopicTV.setText(scirnceTopic);
+        getCategoryNameFromNotfication();
+        if (getArguments()!=null) {
+            pass3 = getArguments().getString("pass3", "");
         }
+            if (navController.getGraph().getStartDestination()==R.id.homeFragment) {
+                 scienceTopicTV.setText(scirnceTopicSideMenu);
+                scirnceTopicSideMenu="";
+        }
+      else if (navController.getGraph().getStartDestination()==R.id.postFragment) {
+                scienceTopicTV.setText(scirnceTopicNotification);
+
+        }
+        else if (pass3!=null && pass3.equals("pass3")) {
+            scienceTopicTV.setText(scirnceTopic);
+
+        }
+
     }
 
     public void onBackPressed() {
@@ -192,19 +231,25 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             @Override
             public void handleOnBackPressed() {
 
-                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_categoriesFragment);
+                navGraph.setStartDestination(R.id.loginFragment);
+                navController.setGraph(navGraph);
+                Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_categoriesFragment);
 
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), callback);
     }
 
-    public void getPost() {
+    public boolean getPost() {
+         checkReturn1 = false;
+
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
         Call<ResultsModel> getPosts = apiInterface.getPosts(categoryName, page);
         getPosts.enqueue(new Callback<ResultsModel>() {
             @Override
             public void onResponse(Call<ResultsModel> call, Response<ResultsModel> response) {
+                checkReturn1 = true;
+
                 if (response.code() == 200) {
                     progressBar.setVisibility(View.INVISIBLE);
 
@@ -218,6 +263,8 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     }
                 }
                 else if (response.code()==404){
+                    checkReturn1 = true;
+
                     progressBar.setVisibility(View.INVISIBLE);
                     Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
                 }
@@ -227,18 +274,20 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             public void onFailure(Call<ResultsModel> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
                 Log.d(TAG, "onFailure: "+t);
-//                Toast.makeText(requireContext(), "No Internet Connection" , Toast.LENGTH_LONG).show();
             }
         });
+        return checkReturn1;
     }
 
-    public void getPostFromActivity() {
-
+    public boolean getPostFromActivity() {
+        checkReturn2 = false ;
+        getCategoryNameFromSideMenu();
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
         Call<ResultsModel> getPosts = apiInterface.getPosts(categoryNameSideMenu, page);
         getPosts.enqueue(new Callback<ResultsModel>() {
             @Override
             public void onResponse(Call<ResultsModel> call, Response<ResultsModel> response) {
+                checkReturn2 = true;
                 if (response.code() == 200) {
                     progressBar.setVisibility(View.INVISIBLE);
 
@@ -255,10 +304,50 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
 
             @Override
             public void onFailure(Call<ResultsModel> call, Throwable t) {
+                checkReturn2 = true;
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
             }
         });
+        return checkReturn2;
+    }
+    public boolean getPostFromNotification() {
+        checkReturn3 = false;
+        getCategoryNameFromNotfication();
+        if (categoryNameNotification!=null && categoryNameNotification.equals("Programming Languages, Compilers, Interpreters")){
+            categoryNameNotification="Programming Languages Compilers Interpreters";
+        }
+        if (categoryNameNotification!=null && categoryNameNotification.equals("SoftwareEngineering")){
+            categoryNameNotification="Software Engineering";
+        }
+        apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
+        Call<ResultsModel> getPosts = apiInterface.getPosts(categoryNameNotification, page);
+        getPosts.enqueue(new Callback<ResultsModel>() {
+            @Override
+            public void onResponse(Call<ResultsModel> call, Response<ResultsModel> response) {
+                checkReturn3 = true;
+                if (response.code() == 200) {
+                    progressBar.setVisibility(View.INVISIBLE);
+
+//                    postModelArrayList.clear();
+                    postModelArrayList.addAll(response.body().getPostModelList());
+                    isLoading = false;
+
+                    postAdapter.notifyDataSetChanged();
+                }   else if (response.code()==404){
+                    progressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultsModel> call, Throwable t) {
+                checkReturn3 = true;
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
+            }
+        });
+        return checkReturn3;
     }
 
     private void getCategoryNameFromCategoriesFragment() {
@@ -272,6 +361,13 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
         sharedPreferences = requireContext().getSharedPreferences("GeekNews", MODE_PRIVATE);
         categoryNameSideMenu = sharedPreferences.getString("name", "");
         scirnceTopicSideMenu = sharedPreferences.getString("topic", "");
+        pass1 = sharedPreferences.getString("pass", "");
+    }
+    private void getCategoryNameFromNotfication() {
+        sharedPreferences = requireContext().getSharedPreferences("GeekNews", MODE_PRIVATE);
+        categoryNameNotification = sharedPreferences.getString("nameCategoryNotfy", "");
+        scirnceTopicNotification = sharedPreferences.getString("scienceTopicCategoryNotfy", "");
+        pass2 = sharedPreferences.getString("passNotfy", "");
     }
 
     private void clickSearchView() {
@@ -280,17 +376,21 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                postModelArrayList.clear();
-                getSearchedPost(query);
-                requestType = "search" ;
-                searchText = query;
-
+                if (!query.equals("")) {
+                    postModelArrayList.clear();
+                    getSearchedPost(query);
+                    requestType = "search";
+                    searchText = query;
+                }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
 
+                if (newText.equals("")){
+                    caseGetPost();
+                }
                 return false;
             }
         });
@@ -330,7 +430,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                 if (response.code() == 200) {
                     progressBar.setVisibility(View.INVISIBLE);
 
-//                    postModelArrayList.clear();
+                    postModelArrayList.clear();
                     postModelArrayList.addAll(response.body().getPostModelList());
                     isLoading = false;
 
@@ -371,7 +471,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     }
                 }   else if (response.code()==404){
                     progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Only those publications", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -384,13 +484,31 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
     }
 
     private void caseGetPost() {
-        if (navController.getGraph().getStartDestination() == R.id.homeFragment) {
+        getCategoryNameFromSideMenu();
+        getCategoryNameFromNotfication();
+        if (getArguments()!=null) {
+            pass3 = getArguments().getString("pass3", "");
+        }
+        if (navController.getGraph().getStartDestination()==R.id.homeFragment) {
             postModelArrayList.clear();
             getPostFromActivity();
-        } else {
+        }
+        else if (navController.getGraph().getStartDestination()==R.id.postFragment) {
+            postModelArrayList.clear();
+            getPostFromNotification();
+        }
+        else if (pass3!=null && pass3.equals("pass3")) {
             postModelArrayList.clear();
             getPost();
         }
+
+//        if (navController.getGraph().getStartDestination() == R.id.homeFragment) {
+//            postModelArrayList.clear();
+//            getPostFromActivity();
+//        } else {
+//            postModelArrayList.clear();
+//            getPost();
+//        }
     }
 
     @Override

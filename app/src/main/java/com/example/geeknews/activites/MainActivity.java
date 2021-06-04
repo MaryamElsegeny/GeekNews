@@ -15,13 +15,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -62,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
     private String token ;
     private ProgressBar progressBar ;
     private String categoryNotfy;
+    private String scienceTopicCategoryNotfy ;
     private String isNotfy;
 
 
@@ -73,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
 
         findId();
         progressBar.setVisibility(View.VISIBLE);
-
+        getStartScreen();
+        getStartScreenotification();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         setUpRecyclerView();
@@ -88,7 +97,10 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
         if (userLoginStatus) {
             getUserName(token);
         }
+
     }
+
+
     public void findId(){
         toolbar =  findViewById(R.id.toolbar_actionbar);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -108,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
                 if (response.code() == 200) {
                     nameTv.setText(response.body().getUser());
                 }
+
                 else {
                     Toast.makeText(MainActivity.this, ""+response.code(), Toast.LENGTH_SHORT).show();
                 }
@@ -155,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
         Model orderModel7 = new Model("Information Systems" , "Management of Computing and Information Systems");
         Model orderModel8 = new Model("Retrieve Information","Information Storage and Retrieval");
 
-
         modelArrayList.add(orderModel1);
         modelArrayList.add(orderModel2);
         modelArrayList.add(orderModel3);
@@ -164,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
         modelArrayList.add(orderModel6);
         modelArrayList.add(orderModel7);
         modelArrayList.add(orderModel8);
-
     }
 
     @Override
@@ -184,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
                 editor.putString("name",model.getNameCategory());
                 editor.putString("topic",model.getCategory());
                 editor.putString("pass","pass");
-
                 editor.apply();
 
                 drawerLayout.closeDrawers();
@@ -214,25 +224,62 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
     }
     private void getStartScreen(){
         Intent intent = getIntent();
-        message = intent.getStringExtra("save userr");
-        categoryNotfy = intent.getStringExtra("notification category");
+        message = intent.getStringExtra("save user");
+
+    }
+    private void getStartScreenotification(){
+        Intent intent = getIntent();
+        categoryNotfy = intent.getStringExtra("category notification");
+        if (categoryNotfy!= null &&categoryNotfy.equals("AI") ){
+            scienceTopicCategoryNotfy="Artificial Intelligence";
+        } else
+        if (categoryNotfy!= null &&categoryNotfy .equals("SoftwareEngineering") ){
+            scienceTopicCategoryNotfy="Software Engineering";
+        } else
+        if (categoryNotfy!= null &&categoryNotfy .equals("Programming Languages, Compilers, Interpreters") ){
+            scienceTopicCategoryNotfy="Programming Languages";
+        }else
+        if (categoryNotfy!= null &&categoryNotfy.equals("Database Management")){
+            scienceTopicCategoryNotfy="Database Management";
+        }else
+        if (categoryNotfy!= null &&categoryNotfy.equals("Algorithm Analysis and Problem Complexity")){
+            scienceTopicCategoryNotfy="Algorithm";
+        }
+        else if (categoryNotfy!= null &&categoryNotfy.equals("Data Mining and Knowledge Discovery"))
+        {
+            scienceTopicCategoryNotfy="Data Mining";
+        }else  if (categoryNotfy!= null &&categoryNotfy.equals("Management of Computing and Information Systems"))
+        {
+            scienceTopicCategoryNotfy="Information Systems";
+        }
+        else if (categoryNotfy!= null &&categoryNotfy.equals("Information Storage and Retrieval")){
+            scienceTopicCategoryNotfy="Retrieve Information";
+        }
         isNotfy = intent.getStringExtra("navigate notification");
+
+        sharedPreferences = getSharedPreferences("GeekNews", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("nameCategoryNotfy",categoryNotfy);
+        editor.putString("scienceTopicCategoryNotfy",scienceTopicCategoryNotfy);
+        editor.putString("passNotfy",isNotfy);
+        editor.apply();
     }
     private void checkStartDistenation() {
-        getStartScreen();
-        if (message.equals("user login")) {
-            navGraph.setStartDestination(R.id.categoriesFragment);
-            navController.setGraph(navGraph);
-        } else if (message.equals("user not login")) {
-            navGraph.setStartDestination(R.id.loginFragment);
-            navController.setGraph(navGraph);
-        }
-        else if (isNotfy.equals("toHome")) {
-            Bundle bundle = new Bundle();
-            bundle.putString("categoryNotfy", categoryNotfy);
-            navGraph.setStartDestination(R.id.homeFragment);
-            navController.setGraph(navGraph,bundle);
 
+        if (message!=null) {
+            if (message.equals("user login")) {
+                navGraph.setStartDestination(R.id.categoriesFragment);
+                navController.setGraph(navGraph);
+            } else if (message.equals("user not login")) {
+                navGraph.setStartDestination(R.id.loginFragment);
+                navController.setGraph(navGraph);
+            }
+        }else
+        if (isNotfy!=null) {
+         if (isNotfy.equals("navigate")) {
+                navGraph.setStartDestination(R.id.postFragment);
+                navController.setGraph(navGraph);
+            }
         }
     }
     private void clickLogout(){
@@ -252,4 +299,5 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
                 edit.clear();
                 edit.commit();
             }
+
 }

@@ -102,6 +102,11 @@ public class CategoriesFragment extends Fragment {
             saveCategory();
             getTokenShared();
             getToken();
+        if (navController.getGraph().getStartDestination()==R.id.homeFragment) {
+            {
+                Navigation.findNavController(view).navigate(R.id.action_categoriesFragment_to_homeFragment );
+
+            }}
             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                 @Override
                 public void onComplete(@NonNull Task<String> task) {
@@ -235,10 +240,17 @@ public class CategoriesFragment extends Fragment {
     }
     private void collectData()
     {
+        Bundle bundle = new Bundle();
+        bundle.putString("pass3","pass3");
+
+//        sharedPreferences = requireContext().getSharedPreferences("GeekNews", Context.MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+//        editor.putString("pass3","pass3");
+//        editor.apply();
         saveCategory();
-        navGraph.setStartDestination(R.id.categoriesFragment);
-        navController.setGraph(navGraph);
-        Navigation.findNavController(view).navigate(R.id.action_categoriesFragment_to_homeFragment);
+//        navGraph.setStartDestination(R.id.categoriesFragment);
+//        navController.setGraph(navGraph );
+        Navigation.findNavController(view).navigate(R.id.action_categoriesFragment_to_homeFragment , bundle);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         sharedViewModel.select("catergory");
 

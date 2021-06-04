@@ -175,12 +175,11 @@ public class SignUpFragment extends Fragment {
                 if (response.code() == 201) {
 
                     if (isAdded()) {
-                        Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_categoriesFragment);
                         if (view == null) {
                             view = new View(requireContext());
                         }
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                        Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_categoriesFragment);
+                        Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_categoriesFragment);
                     }
                     //save user login
                     Boolean saveUserLogin = true;

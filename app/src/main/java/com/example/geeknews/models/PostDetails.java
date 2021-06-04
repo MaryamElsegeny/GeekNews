@@ -22,6 +22,8 @@ public class PostDetails {
     private String date;
     @SerializedName("abstract")
     private String textAbstract ;
+    @SerializedName("category")
+    private String category ;
 
     public String getType() {
         return type;
@@ -85,5 +87,13 @@ public class PostDetails {
 
     public void setTextAbstract(String textAbstract) {
         this.textAbstract = textAbstract;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }
