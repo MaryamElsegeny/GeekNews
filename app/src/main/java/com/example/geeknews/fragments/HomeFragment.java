@@ -266,7 +266,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     checkReturn1 = true;
 
                     progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -298,7 +298,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     postAdapter.notifyDataSetChanged();
                 }   else if (response.code()==404){
                     progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -336,7 +336,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     postAdapter.notifyDataSetChanged();
                 }   else if (response.code()==404){
                     progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -384,7 +384,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                 }
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
 
@@ -441,7 +440,7 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     }
                 }   else if (response.code()==404){
                     progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireContext(), "No publications more", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -471,7 +470,8 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
                     }
                 }   else if (response.code()==404){
                     progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(requireContext(), "Only those publications", Toast.LENGTH_SHORT).show();
+                    page=1;
+//                    Toast.makeText(requireContext(), "Only those publications", Toast.LENGTH_SHORT).show();
                 }
             }
 

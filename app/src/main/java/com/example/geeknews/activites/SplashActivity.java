@@ -1,10 +1,12 @@
 package com.example.geeknews.activites;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -16,11 +18,19 @@ public class SplashActivity extends AppCompatActivity {
     boolean isLogin  ;
     private static final String TAG = "";
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: "+"called");
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        Log.d(TAG, "onCreate: " + "called");
 
         new Thread( new Runnable() {
             @Override
@@ -70,8 +80,11 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
         } ).start();
-
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: " + "aaaa");
+    }
 }

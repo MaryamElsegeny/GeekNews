@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
                 }
 
                 else {
-                    Toast.makeText(MainActivity.this, ""+response.code(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, ""+response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
