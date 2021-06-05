@@ -388,7 +388,14 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             public boolean onQueryTextChange(String newText) {
 
                 if (newText.equals("")){
+                    filterIV.setVisibility(View.INVISIBLE);
+
                     caseGetPost();
+                }
+                else
+                {
+                    filterIV.setVisibility(View.VISIBLE);
+
                 }
                 return false;
             }
