@@ -376,7 +376,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-
                 if (!query.equals("")) {
                     postModelArrayList.clear();
                     getSearchedPost(query);
