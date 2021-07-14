@@ -166,7 +166,7 @@ public class CategoriesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 softwareEngineering.getBackground().setAlpha(180);
-                nameCategory="Software Engineering";
+                nameCategory="SoftwareEngineering";
                 scienceTopic="Software Engineering";
                 collectData();
 

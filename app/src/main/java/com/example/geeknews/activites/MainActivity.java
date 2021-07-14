@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker , Bo
     }
 
     private void addDataToList() {
-        Model orderModel1= new Model("Software Engineering" , "Software Engineering");
+        Model orderModel1= new Model("Software Engineering" , "SoftwareEngineering");
         Model orderModel2 = new Model("Programming Languages" , "Programming Languages Compilers Interpreters");
         Model orderModel3 = new Model("Database Management" , "Database Management");
         Model orderModel4 = new Model("Artificial Intelligence" , "AI");

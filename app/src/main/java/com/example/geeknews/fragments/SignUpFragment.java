@@ -164,30 +164,24 @@ public class SignUpFragment extends Fragment {
     private void postRegister() {
         getDataFromEd();
         apiInterface = RetrofitFactory.getRetrofit().create(ApiInterface.class);
-
         User user = new User(username, password , passwordConf , firstName , lastName , email , categoriess);
         Call<User> postLogin = apiInterface.postRegister(user);
         postLogin.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 progressBar.setVisibility(View.INVISIBLE);
-
                 if (response.code() == 201) {
-
                     if (isAdded()) {
                         if (view == null) {
-                            view = new View(requireContext());
-                        }
+                            view = new View(requireContext()); }
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                        Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_categoriesFragment);
-                    }
+                        Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_categoriesFragment); }
                     //save user login
                     Boolean saveUserLogin = true;
                     sharedPreferences = requireActivity().getSharedPreferences("GeekNews", 0);
                     editor = sharedPreferences.edit();
                     editor.putBoolean("saveUserLogin", saveUserLogin);
                     editor.commit();
-
                     //save token
                     String token = response.body().getAccessToken();
                     sharedPreferences = requireActivity().getSharedPreferences("GeekNews", 0);

@@ -375,7 +375,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-
                 if (!query.equals("")) {
                     postModelArrayList.clear();
                     getSearchedPost(query);
@@ -386,16 +385,13 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-
                 if (newText.equals("")){
                     filterIV.setVisibility(View.INVISIBLE);
-
                     caseGetPost();
                 }
                 else
                 {
                     filterIV.setVisibility(View.VISIBLE);
-
                 }
                 return false;
             }
@@ -467,7 +463,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
             public void onResponse(Call<ResultsModel> call, Response<ResultsModel> response) {
                 if (response.code() == 200) {
                     progressBar.setVisibility(View.INVISIBLE);
-
 //                    postModelArrayList.clear();
                     postModelArrayList.addAll(response.body().getPostModelList());
                     isLoading = false;
@@ -481,7 +476,6 @@ public class HomeFragment extends Fragment implements BottomSheetFilter.BottomSh
 //                    Toast.makeText(requireContext(), "Only those publications", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<ResultsModel> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
